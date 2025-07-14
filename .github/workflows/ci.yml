@@ -74,3 +74,5 @@ jobs:
         with:
           branch: gh-pages
           folder: dist/my-angular-app/browser
+          clean: true
+          force: true
