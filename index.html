@@ -8,6 +8,32 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="stylesheet" href="styles-5INURTSO.css"></head>
 <body>
-  20250717
+  <h1>登入表單</h1>
+  <form id="login-form">
+    <label for="username">使用者名稱：</label>
+    <input type="text" id="username" name="username">
+    <br>
+    <label for="password">密碼：</label>
+    <input type="password" id="password" name="password">
+    <br>
+    <button type="submit">登入</button>
+  </form>
+  <p id="message" style="color: green;"></p>
+  <script>
+    const form = document.getElementById('login-form');
+    const message = document.getElementById('message');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const username = form.username.value;
+      const password = form.password.value;
+      if (username === 'admin' && password === '1234') {
+        message.textContent = '登入成功！';
+        message.style.color = 'green';
+      } else {
+        message.textContent = '登入失敗。';
+        message.style.color = 'red';
+      }
+    });
+  </script>
 <script src="polyfills-B6TNHZQ6.js" type="module"></script><script src="main-5OP53SXL.js" type="module"></script></body>
 </html>
