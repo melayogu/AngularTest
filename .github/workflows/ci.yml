@@ -74,8 +74,14 @@ jobs:
           npm run start &
           npx wait-on http://localhost:4200
 
-      - name: Run Playwright tests
-        run: npx playwright test
+      - name: Run Playwright tests and generate HTML report
+        run: npx playwright test --reporter=html
+
+      - name: Upload Playwright HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report
 
   build_and_deploy:
     name: 🚀 Build & Deploy Angular
