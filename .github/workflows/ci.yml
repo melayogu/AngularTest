@@ -1,1 +1,50 @@
+name: Node.js CI with Commitlint
 
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  commit_lint:
+    name: ✅ Lint Commit Message
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 安裝 Commitlint CLI 與規則
+        run: |
+          npm install --no-save @commitlint/{cli,config-conventional}
+          echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+
+      - name: 檢查最新一筆 Commit Message
+        run: |
+          git log -1 --pretty=format:"%s" | npx commitlint --config commitlint.config.js
+
+  check_node:
+    name: 🔧 Check Node.js & NPM
+    runs-on: ubuntu-latest
+    needs: commit_lint  # ✅ 等 commit_lint 成功後才執行
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 🔍 Node.js Version
+        run: node -v
+
+      - name: 🔍 NPM Version
+        run: npm -v
