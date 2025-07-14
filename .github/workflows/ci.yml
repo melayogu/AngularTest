@@ -83,6 +83,12 @@ jobs:
           name: playwright-report
           path: playwright-report
 
+      - name: Upload Playwright videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-videos
+          path: test-results/**/*.webm
+
   build_and_deploy:
     name: 🚀 Build & Deploy Angular
     runs-on: ubuntu-latest
