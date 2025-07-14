@@ -70,8 +70,7 @@ jobs:
         run: npm run build -- --configuration production
 
       - name: Deploy to GitHub Pages
-        run: |
-          npx angular-cli-ghpages --dir=dist/my-angular-app/browser \
-            --name="github-actions[bot]" \
-            --email="github-actions[bot]@users.noreply.github.com" \
-            --message="🤖 CI auto-deploy"
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist/my-angular-app/browser
