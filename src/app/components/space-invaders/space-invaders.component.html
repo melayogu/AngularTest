@@ -1,0 +1,126 @@
+<div class="space-invaders-container">
+  <div class="game-header">
+    <h1>🚀 太空入侵者</h1>
+    <button class="btn-back" (click)="goBack()">返回</button>
+  </div>
+
+  <div class="game-content">
+    <!-- 遊戲資訊面板 -->
+    <div class="game-info">
+      <div class="score-panel">
+        <div class="score-item">
+          <span class="label">分數:</span>
+          <span class="value">{{ score }}</span>
+        </div>
+        <div class="score-item">
+          <span class="label">等級:</span>
+          <span class="value">{{ level }}</span>
+        </div>
+        <div class="score-item">
+          <span class="label">生命:</span>
+          <span class="value">{{ lives }}</span>
+        </div>
+      </div>
+
+      <!-- 控制說明 -->
+      <div class="controls">
+        <h3>操作說明</h3>
+        <div class="control-item">
+          <span class="key">←→</span>
+          <span class="action">左右移動</span>
+        </div>
+        <div class="control-item">
+          <span class="key">空格</span>
+          <span class="action">射擊</span>
+        </div>
+        <div class="control-item">
+          <span class="key">P</span>
+          <span class="action">暫停</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 遊戲區域 -->
+    <div class="game-area">
+      <!-- 遊戲畫布 -->
+      <div class="game-canvas" 
+           [style.width.px]="canvasWidth"
+           [style.height.px]="canvasHeight">
+        
+        <!-- 玩家 -->
+        <div class="player"
+             *ngIf="player.active"
+             [ngStyle]="getObjectStyle(player)">
+          🚀
+        </div>
+        
+        <!-- 外星人 -->
+        <div class="alien"
+             *ngFor="let alien of aliens"
+             [ngStyle]="getObjectStyle(alien)"
+             [class.active]="alien.active">
+          {{ getAlienEmoji(alien) }}
+        </div>
+        
+        <!-- 玩家子彈 -->
+        <div class="bullet player-bullet"
+             *ngFor="let bullet of bullets"
+             [ngStyle]="getObjectStyle(bullet)"
+             [class.active]="bullet.active">
+        </div>
+        
+        <!-- 外星人子彈 -->
+        <div class="bullet alien-bullet"
+             *ngFor="let bullet of alienBullets"
+             [ngStyle]="getObjectStyle(bullet)"
+             [class.active]="bullet.active">
+        </div>
+        
+        <!-- 爆炸效果 -->
+        <div class="explosion"
+             *ngFor="let explosion of explosions"
+             [ngStyle]="getExplosionStyle(explosion)">
+          💥
+        </div>
+      </div>
+
+      <!-- 遊戲覆蓋層 -->
+      <div class="game-overlay" *ngIf="!gameRunning || gameOver">
+        <div class="overlay-content">
+          <div *ngIf="!gameOver && !gameRunning" class="start-screen">
+            <h2>太空入侵者</h2>
+            <p>射擊外星人，保衛地球！</p>
+            <button class="btn-primary" (click)="startGame()">開始遊戲</button>
+          </div>
+          
+          <div *ngIf="gameOver" class="game-over-screen">
+            <h2>遊戲結束</h2>
+            <p>最終分數: {{ score }}</p>
+            <p>達到等級: {{ level }}</p>
+            <button class="btn-primary" (click)="restartGame()">重新開始</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 暫停覆蓋層 -->
+      <div class="pause-overlay" *ngIf="gameRunning && !gameOver && gamePaused">
+        <div class="pause-content">
+          <h2>遊戲暫停</h2>
+          <button class="btn-primary" (click)="pauseGame()">繼續遊戲</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 移動端控制按鈕 -->
+  <div class="mobile-controls">
+    <div class="controls-row">
+      <button class="control-btn" (click)="keys['ArrowLeft'] = true" (mouseup)="keys['ArrowLeft'] = false">←</button>
+      <button class="control-btn shoot-btn" (click)="shoot()">🔫</button>
+      <button class="control-btn" (click)="keys['ArrowRight'] = true" (mouseup)="keys['ArrowRight'] = false">→</button>
+    </div>
+    <div class="controls-row">
+      <button class="control-btn pause-btn" (click)="pauseGame()">⏸</button>
+    </div>
+  </div>
+</div>

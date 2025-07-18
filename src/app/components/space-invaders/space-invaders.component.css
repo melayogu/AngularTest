@@ -1,0 +1,429 @@
+/* 太空入侵者遊戲樣式 */
+.space-invaders-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 星空背景效果 */
+.space-invaders-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 40px, #eee, transparent),
+    radial-gradient(1px 1px at 130px 80px, #fff, transparent),
+    radial-gradient(2px 2px at 160px 30px, #eee, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  z-index: 1;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.game-header h1 {
+  color: white;
+  font-size: 2.5em;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.btn-back {
+  background: #ff4757;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+}
+
+.btn-back:hover {
+  background: #ff3742;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+}
+
+.game-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.game-info {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  min-width: 250px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.score-panel {
+  margin-bottom: 20px;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.score-item .label {
+  color: #fff;
+  font-weight: bold;
+}
+
+.score-item .value {
+  color: #00ff00;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.controls h3 {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.control-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 6px 0;
+}
+
+.control-item .key {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.control-item .action {
+  color: #ccc;
+  font-size: 0.9em;
+}
+
+.game-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-canvas {
+  position: relative;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00ff00;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  overflow: hidden;
+}
+
+.player {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  z-index: 10;
+  filter: drop-shadow(0 0 5px #00ff00);
+}
+
+.alien {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  z-index: 5;
+  transition: all 0.1s ease;
+  opacity: 1;
+}
+
+.alien:not(.active) {
+  opacity: 0;
+}
+
+.bullet {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 8;
+  opacity: 1;
+}
+
+.bullet:not(.active) {
+  opacity: 0;
+}
+
+.player-bullet {
+  background: #ffff00;
+  box-shadow: 0 0 5px #ffff00;
+}
+
+.alien-bullet {
+  background: #ff0000;
+  box-shadow: 0 0 5px #ff0000;
+}
+
+.explosion {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  z-index: 20;
+}
+
+.overlay-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.start-screen h2,
+.game-over-screen h2 {
+  color: white;
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.start-screen p,
+.game-over-screen p {
+  color: #ccc;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.pause-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  z-index: 25;
+}
+
+.pause-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.pause-content h2 {
+  color: white;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+
+/* 移動端控制按鈕 */
+.mobile-controls {
+  margin-top: 20px;
+  display: none;
+  position: relative;
+  z-index: 2;
+}
+
+.controls-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.control-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 60px;
+  user-select: none;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.control-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.shoot-btn {
+  background: rgba(255, 255, 0, 0.3);
+  border-color: rgba(255, 255, 0, 0.5);
+}
+
+.pause-btn {
+  background: rgba(255, 184, 0, 0.3);
+  border-color: rgba(255, 184, 0, 0.5);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .space-invaders-container {
+    padding: 10px;
+  }
+  
+  .game-header h1 {
+    font-size: 2em;
+  }
+  
+  .game-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .game-info {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .game-canvas {
+    max-width: 100%;
+    transform: scale(0.8);
+  }
+  
+  .mobile-controls {
+    display: block;
+  }
+  
+  .controls {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .game-header h1 {
+    font-size: 1.8em;
+  }
+  
+  .game-canvas {
+    transform: scale(0.6);
+  }
+  
+  .game-info {
+    padding: 15px;
+  }
+  
+  .overlay-content {
+    padding: 20px;
+    margin: 0 10px;
+  }
+}
+
+/* 動畫效果 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.space-invaders-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* 外星人移動動畫 */
+.alien {
+  animation: alienFloat 2s ease-in-out infinite;
+}
+
+@keyframes alienFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+/* 子彈發光效果 */
+.bullet {
+  animation: bulletGlow 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes bulletGlow {
+  0% { box-shadow: 0 0 5px currentColor; }
+  100% { box-shadow: 0 0 15px currentColor; }
+}
