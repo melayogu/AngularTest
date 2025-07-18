@@ -1,0 +1,113 @@
+<div class="puzzle-2048-container">
+  <div class="game-header">
+    <h1>🔢 2048</h1>
+    <button class="btn-back" (click)="goBack()">返回</button>
+  </div>
+
+  <div class="game-content">
+    <!-- 分數面板 -->
+    <div class="score-panel">
+      <div class="score-container">
+        <div class="score-box">
+          <div class="score-title">分數</div>
+          <div class="score-value">{{ gameState.score }}</div>
+        </div>
+        <div class="score-box best-score">
+          <div class="score-title">最佳</div>
+          <div class="score-value">{{ gameState.bestScore }}</div>
+        </div>
+      </div>
+      
+      <div class="game-controls">
+        <button class="btn-restart" (click)="restartGame()">重新開始</button>
+      </div>
+    </div>
+
+    <!-- 遊戲說明 -->
+    <div class="game-instructions">
+      <p><strong>如何遊玩：</strong> 使用方向鍵移動磚塊，當兩個相同數字的磚塊碰撞時，它們會合併成一個！</p>
+      <p><strong>目標：</strong> 達到 2048 磚塊以獲得勝利！</p>
+    </div>
+
+    <!-- 遊戲區域 -->
+    <div class="game-area">
+      <div class="game-container" 
+           [ngStyle]="getGridContainerStyle()"
+           (touchstart)="onTouchStart($event)"
+           (touchend)="onTouchEnd($event)">
+        
+        <!-- 網格背景 -->
+        <div class="grid-container">
+          <div class="grid-cell" 
+               *ngFor="let cell of getGridBackground()"
+               [ngStyle]="getGridCellStyle(cell)">
+          </div>
+        </div>
+        
+        <!-- 磚塊 -->
+        <div class="tile-container">
+          <div class="tile" 
+               *ngFor="let tile of gameState.tiles"
+               [ngClass]="getTileClass(tile)"
+               [ngStyle]="getTileStyle(tile)">
+            <div class="tile-inner">
+              {{ tile.value }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 操作說明 -->
+    <div class="controls-guide">
+      <div class="control-item">
+        <span class="key-combo">
+          <span class="key">↑</span>
+          <span class="key">↓</span>
+          <span class="key">←</span>
+          <span class="key">→</span>
+        </span>
+        <span class="action">移動磚塊</span>
+      </div>
+      <div class="control-item">
+        <span class="key">R</span>
+        <span class="action">重新開始</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 遊戲結束覆蓋層 -->
+  <div class="game-overlay" *ngIf="gameState.gameOver">
+    <div class="overlay-content">
+      <h2>遊戲結束！</h2>
+      <p>最終分數: {{ gameState.score }}</p>
+      <p *ngIf="gameState.score === gameState.bestScore">🎉 新紀錄！</p>
+      <button class="btn-primary" (click)="restartGame()">再試一次</button>
+    </div>
+  </div>
+
+  <!-- 勝利覆蓋層 -->
+  <div class="game-overlay win-overlay" *ngIf="gameState.gameWon">
+    <div class="overlay-content">
+      <h2>🎉 恭喜！你贏了！</h2>
+      <p>你成功達到了 2048！</p>
+      <p>分數: {{ gameState.score }}</p>
+      <div class="win-buttons">
+        <button class="btn-primary" (click)="keepPlaying()">繼續遊戲</button>
+        <button class="btn-secondary" (click)="restartGame()">重新開始</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 移動端虛擬按鍵 -->
+  <div class="mobile-controls">
+    <div class="virtual-dpad">
+      <button class="dpad-btn up" (click)="move('up')">↑</button>
+      <div class="dpad-middle">
+        <button class="dpad-btn left" (click)="move('left')">←</button>
+        <button class="dpad-btn right" (click)="move('right')">→</button>
+      </div>
+      <button class="dpad-btn down" (click)="move('down')">↓</button>
+    </div>
+  </div>
+</div>
