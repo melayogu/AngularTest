@@ -130,14 +130,14 @@
 
   .game-header {
     background: rgba(255, 255, 255, 0.9);
-    padding: 15px;
+    padding: 10px;
     text-align: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
   .game-header h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #2C5282;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
   }
@@ -164,7 +164,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     min-height: 0;
     overflow: hidden;
   }
@@ -172,9 +172,9 @@
   .river {
     width: 100%;
     max-width: 800px;
-    height: 60vh;
-    max-height: 600px;
-    min-height: 400px;
+    height: 50vh;
+    max-height: 500px;
+    min-height: 300px;
     background: radial-gradient(circle at center, #E6F3FF 0%, #B8E6FF 100%);
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -229,11 +229,12 @@
 
   .game-controls {
     background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    flex-shrink: 0;
   }
 
   .control-instructions {
@@ -241,8 +242,8 @@
   }
 
   .control-instructions p {
-    margin: 5px 0;
-    font-size: 1.1rem;
+    margin: 3px 0;
+    font-size: 1rem;
     color: #2C5282;
     font-weight: 500;
   }
@@ -253,8 +254,8 @@
   }
 
   .game-btn {
-    padding: 12px 24px;
-    font-size: 1.1rem;
+    padding: 10px 20px;
+    font-size: 1rem;
     font-weight: bold;
     border: none;
     border-radius: 25px;
@@ -292,50 +293,6 @@
 
   @media screen and (max-width: 768px) {
     .game-header h1 {
-      font-size: 1.8rem;
-    }
-    
-    .game-header {
-      padding: 10px;
-    }
-    
-    .game-info {
-      flex-direction: column;
-      gap: 10px;
-    }
-    
-    .game-controls {
-      flex-direction: column;
-      gap: 15px;
-      padding: 15px;
-    }
-    
-    .control-instructions {
-      text-align: center;
-    }
-    
-    .control-instructions p {
-      font-size: 1rem;
-      margin: 3px 0;
-    }
-    
-    .river {
-      height: 50vh;
-      min-height: 300px;
-    }
-    
-    .river-container {
-      padding: 10px;
-    }
-    
-    .game-btn {
-      padding: 10px 20px;
-      font-size: 1rem;
-    }
-  }
-  
-  @media screen and (max-height: 700px) {
-    .game-header h1 {
       font-size: 1.5rem;
     }
     
@@ -343,8 +300,28 @@
       padding: 8px;
     }
     
+    .game-info {
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .game-controls {
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px;
+    }
+    
+    .control-instructions {
+      text-align: center;
+    }
+    
+    .control-instructions p {
+      font-size: 0.9rem;
+      margin: 2px 0;
+    }
+    
     .river {
-      height: 45vh;
+      height: 40vh;
       min-height: 250px;
     }
     
@@ -352,8 +329,75 @@
       padding: 8px;
     }
     
+    .game-btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media screen and (max-height: 700px) {
+    .game-header h1 {
+      font-size: 1.3rem;
+    }
+    
+    .game-header {
+      padding: 6px;
+    }
+    
+    .river {
+      height: 35vh;
+      min-height: 200px;
+    }
+    
+    .river-container {
+      padding: 6px;
+    }
+    
     .game-controls {
-      padding: 10px;
+      padding: 8px;
+    }
+    
+    .control-instructions p {
+      font-size: 0.8rem;
+      margin: 1px 0;
+    }
+    
+    .game-btn {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media screen and (max-height: 600px) {
+    .game-header h1 {
+      font-size: 1.2rem;
+    }
+    
+    .game-header {
+      padding: 5px;
+    }
+    
+    .river {
+      height: 30vh;
+      min-height: 180px;
+    }
+    
+    .river-container {
+      padding: 5px;
+    }
+    
+    .game-controls {
+      padding: 6px;
+    }
+    
+    .control-instructions p {
+      font-size: 0.7rem;
+      margin: 1px 0;
+    }
+    
+    .game-btn {
+      padding: 5px 10px;
+      font-size: 0.7rem;
     }
   }
 </style>
