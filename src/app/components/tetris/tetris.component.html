@@ -1,0 +1,120 @@
+<div class="tetris-container">
+  <div class="game-header">
+    <h1>🧩 俄羅斯方塊</h1>
+    <button class="btn-back" (click)="goBack()">返回</button>
+  </div>
+
+  <div class="game-content">
+    <!-- 遊戲資訊面板 -->
+    <div class="game-info">
+      <div class="score-panel">
+        <div class="score-item">
+          <span class="label">分數:</span>
+          <span class="value">{{ score }}</span>
+        </div>
+        <div class="score-item">
+          <span class="label">等級:</span>
+          <span class="value">{{ level }}</span>
+        </div>
+        <div class="score-item">
+          <span class="label">行數:</span>
+          <span class="value">{{ lines }}</span>
+        </div>
+      </div>
+
+      <!-- 下一個方塊預覽 -->
+      <div class="next-piece">
+        <h3>下一個方塊</h3>
+        <div class="next-preview">
+          <div class="preview-grid">
+            <div *ngFor="let row of [0,1,2,3]" class="preview-row">
+              <div *ngFor="let col of [0,1,2,3]" 
+                   class="preview-block"
+                   [style.background-color]="getPreviewBlockColor(col, row)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 控制說明 -->
+      <div class="controls">
+        <h3>操作說明</h3>
+        <div class="control-item">
+          <span class="key">←→</span>
+          <span class="action">左右移動</span>
+        </div>
+        <div class="control-item">
+          <span class="key">↓</span>
+          <span class="action">加速下降</span>
+        </div>
+        <div class="control-item">
+          <span class="key">↑</span>
+          <span class="action">旋轉</span>
+        </div>
+        <div class="control-item">
+          <span class="key">空格</span>
+          <span class="action">硬下降</span>
+        </div>
+        <div class="control-item">
+          <span class="key">P</span>
+          <span class="action">暫停</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 遊戲區域 -->
+    <div class="game-area">
+      <!-- 遊戲板 -->
+      <div class="game-board">
+        <div *ngFor="let row of board; let y = index" class="board-row">
+          <div *ngFor="let cell of row; let x = index" 
+               class="board-cell"
+               [ngStyle]="getBlockStyle(x, y)">
+          </div>
+        </div>
+      </div>
+
+      <!-- 遊戲覆蓋層 -->
+      <div class="game-overlay" *ngIf="!gameRunning">
+        <div class="overlay-content">
+          <div *ngIf="!gameOver && !gameRunning" class="start-screen">
+            <h2>俄羅斯方塊</h2>
+            <p>經典的俄羅斯方塊遊戲</p>
+            <button class="btn-primary" (click)="startGame()">開始遊戲</button>
+          </div>
+          
+          <div *ngIf="gameOver" class="game-over-screen">
+            <h2>遊戲結束</h2>
+            <p>最終分數: {{ score }}</p>
+            <p>完成行數: {{ lines }}</p>
+            <p>達到等級: {{ level }}</p>
+            <button class="btn-primary" (click)="restartGame()">重新開始</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 暫停覆蓋層 -->
+      <div class="pause-overlay" *ngIf="gameRunning && !gameOver">
+        <div class="pause-content">
+          <h2>遊戲暫停</h2>
+          <button class="btn-primary" (click)="pauseGame()">繼續遊戲</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 移動端控制按鈕 -->
+  <div class="mobile-controls">
+    <div class="controls-row">
+      <button class="control-btn" (click)="movePiece(-1, 0)">←</button>
+      <button class="control-btn rotate-btn" (click)="rotatePiece()">↻</button>
+      <button class="control-btn" (click)="movePiece(1, 0)">→</button>
+    </div>
+    <div class="controls-row">
+      <button class="control-btn" (click)="movePiece(0, 1)">↓</button>
+      <button class="control-btn pause-btn" (click)="pauseGame()">⏸</button>
+      <button class="control-btn drop-btn" (click)="hardDrop()">⇊</button>
+    </div>
+  </div>
+</div>
