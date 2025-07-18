@@ -12,6 +12,9 @@ interface GameItem {
   x: number;
   y: number;
   size: number;
+  angle?: number;
+  velocityX?: number;
+  velocityY?: number;
 }
 
 interface WaterBubble {
@@ -135,7 +138,10 @@ export class AppComponent implements OnInit, OnDestroy {
       this.collectibles.push({
         x: this.riverCenterX + Math.cos(angle) * radius,
         y: this.riverCenterY + Math.sin(angle) * radius,
-        size: 8
+        size: 8,
+        angle: angle,
+        velocityX: (Math.random() - 0.5) * 2, // 隨機水平速度 -1 到 1
+        velocityY: (Math.random() - 0.5) * 2  // 隨機垂直速度 -1 到 1
       });
     }
   }
@@ -182,6 +188,9 @@ export class AppComponent implements OnInit, OnDestroy {
     
     // 更新水流氣泡
     this.updateWaterBubbles();
+    
+    // 更新收集物品位置
+    this.updateCollectibles();
     
     // 碰撞檢測
     this.checkCollisions();
@@ -236,6 +245,58 @@ export class AppComponent implements OnInit, OnDestroy {
       const radius = 150 + Math.sin(bubble.angle * 3) * 30;
       bubble.x = this.riverCenterX + Math.cos(bubble.angle) * radius;
       bubble.y = this.riverCenterY + Math.sin(bubble.angle) * radius;
+    });
+  }
+  
+  updateCollectibles() {
+    this.collectibles.forEach(item => {
+      if (item.velocityX !== undefined && item.velocityY !== undefined) {
+        // 更新位置
+        const newX = item.x + item.velocityX;
+        const newY = item.y + item.velocityY;
+        
+        // 檢查是否在河道內
+        const distanceFromCenter = Math.sqrt(
+          Math.pow(newX - this.riverCenterX, 2) + 
+          Math.pow(newY - this.riverCenterY, 2)
+        );
+        
+        // 如果在河道範圍內，更新位置
+        if (distanceFromCenter <= this.riverRadius - 20 && distanceFromCenter >= 100) {
+          item.x = newX;
+          item.y = newY;
+        } else {
+          // 如果撞到邊界，反彈
+          if (distanceFromCenter >= this.riverRadius - 20) {
+            // 撞到外圍，往內反彈
+            const centerDirection = Math.atan2(
+              this.riverCenterY - item.y,
+              this.riverCenterX - item.x
+            );
+            item.velocityX = Math.cos(centerDirection) * Math.abs(item.velocityX || 1);
+            item.velocityY = Math.sin(centerDirection) * Math.abs(item.velocityY || 1);
+          } else {
+            // 撞到內圈，往外反彈
+            const awayDirection = Math.atan2(
+              item.y - this.riverCenterY,
+              item.x - this.riverCenterX
+            );
+            item.velocityX = Math.cos(awayDirection) * Math.abs(item.velocityX || 1);
+            item.velocityY = Math.sin(awayDirection) * Math.abs(item.velocityY || 1);
+          }
+        }
+        
+        // 隨機改變方向（讓移動更自然）
+        if (Math.random() < 0.02) { // 2% 機率改變方向
+          item.velocityX += (Math.random() - 0.5) * 0.5;
+          item.velocityY += (Math.random() - 0.5) * 0.5;
+          
+          // 限制速度範圍
+          const maxSpeed = 1.5;
+          item.velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, item.velocityX));
+          item.velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, item.velocityY));
+        }
+      }
     });
   }
   
