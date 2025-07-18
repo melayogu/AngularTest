@@ -1,0 +1,71 @@
+<div class="game-selector-container">
+  <div class="header">
+    <h1>🎮 遊戲中心</h1>
+    <p>選擇你喜歡的遊戲開始遊玩！</p>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label>遊戲類型：</label>
+      <select [(ngModel)]="selectedCategory" class="filter-select">
+        <option value="all">全部</option>
+        <option value="action">動作</option>
+        <option value="puzzle">益智</option>
+        <option value="arcade">街機</option>
+        <option value="strategy">策略</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>難度：</label>
+      <select [(ngModel)]="selectedDifficulty" class="filter-select">
+        <option value="all">全部</option>
+        <option value="easy">簡單</option>
+        <option value="medium">中等</option>
+        <option value="hard">困難</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="games-grid">
+    <div class="game-card" 
+         *ngFor="let game of filteredGames" 
+         (click)="playGame(game)"
+         [attr.data-category]="game.category"
+         [attr.data-difficulty]="game.difficulty">
+      
+      <div class="game-icon">{{game.icon}}</div>
+      
+      <div class="game-info">
+        <h3>{{game.name}}</h3>
+        <p>{{game.description}}</p>
+        
+        <div class="game-meta">
+          <span class="category-badge" 
+                [style.background-color]="getCategoryColor(game.category)">
+            {{game.category}}
+          </span>
+          <span class="difficulty-badge" 
+                [style.background-color]="getDifficultyColor(game.difficulty)">
+            {{game.difficulty}}
+          </span>
+        </div>
+      </div>
+      
+      <div class="play-button">
+        <button class="btn-play">開始遊戲</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-item">
+      <span class="stat-number">{{filteredGames.length}}</span>
+      <span class="stat-label">可用遊戲</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">{{games.length}}</span>
+      <span class="stat-label">總遊戲數</span>
+    </div>
+  </div>
+</div>

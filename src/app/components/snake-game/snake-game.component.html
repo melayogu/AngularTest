@@ -1,0 +1,83 @@
+<div class="game-container">
+  <div class="game-header">
+    <button class="back-btn" (click)="backToMenu()">← 返回遊戲選單</button>
+    <h1>🐍 貪吃蛇遊戲</h1>
+    <div class="game-info">
+      <div class="score">得分: {{score}}</div>
+      <div class="length">長度: {{snake.length}}</div>
+    </div>
+  </div>
+
+  <div class="game-area">
+    <div class="game-canvas" 
+         [style.width.px]="canvasWidth" 
+         [style.height.px]="canvasHeight">
+      
+      <!-- 蛇身 -->
+      <div class="snake-segment" 
+           *ngFor="let segment of snake; let i = index"
+           [ngStyle]="getSnakeSegmentStyle(segment, i)">
+        <div class="snake-eye" *ngIf="i === 0"></div>
+        <div class="snake-eye" *ngIf="i === 0"></div>
+      </div>
+      
+      <!-- 食物 -->
+      <div class="food" 
+           [ngStyle]="getFoodStyle()">
+        🍎
+      </div>
+    </div>
+    
+    <!-- 遊戲結束畫面 -->
+    <div class="game-over" *ngIf="gameOver">
+      <h2>🎮 遊戲結束！</h2>
+      <p>最終得分: {{score}}</p>
+      <p>蛇的長度: {{snake.length}}</p>
+      <button class="retry-btn" (click)="startGame()">再試一次</button>
+    </div>
+  </div>
+
+  <div class="game-controls">
+    <div class="control-instructions">
+      <p>🎮 使用方向鍵控制蛇的移動</p>
+      <p>🍎 吃到蘋果得分並變長</p>
+      <p>⚠️ 避免撞牆和撞到自己</p>
+    </div>
+    
+    <div class="game-buttons">
+      <button (click)="startGame()" 
+              [disabled]="gameRunning"
+              class="game-btn start-btn">
+        {{gameRunning ? '遊戲進行中' : '開始遊戲'}}
+      </button>
+      <button (click)="resetGame()" 
+              class="game-btn reset-btn">
+        重新開始
+      </button>
+    </div>
+    
+    <!-- 虛擬方向鍵 (手機版) -->
+    <div class="virtual-controls">
+      <div class="control-row">
+        <button class="control-btn" 
+                (click)="onDirectionChange('ArrowUp')">
+          ↑
+        </button>
+      </div>
+      <div class="control-row">
+        <button class="control-btn" 
+                (click)="onDirectionChange('ArrowLeft')">
+          ←
+        </button>
+        <button class="control-btn" 
+                (click)="onDirectionChange('ArrowDown')">
+          ↓
+        </button>
+        <button class="control-btn" 
+                (click)="onDirectionChange('ArrowRight')">
+          →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

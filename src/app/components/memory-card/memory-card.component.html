@@ -1,0 +1,86 @@
+<div class="game-container">
+  <div class="game-header">
+    <button class="back-btn" (click)="backToMenu()">← 返回遊戲選單</button>
+    <h1>🧠 記憶翻牌遊戲</h1>
+    <div class="game-info">
+      <div class="stat">
+        <span class="stat-label">得分</span>
+        <span class="stat-value">{{score}}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">移動次數</span>
+        <span class="stat-value">{{moves}}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">時間</span>
+        <span class="stat-value">{{formatTime(gameTime)}}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">已配對</span>
+        <span class="stat-value">{{matchedPairs}}/{{totalPairs}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-area">
+    <div class="cards-grid">
+      <div class="memory-card" 
+           *ngFor="let card of cards"
+           [class]="getCardClass(card)"
+           (click)="flipCard(card)">
+        <div class="card-front">
+          <div class="card-pattern">?</div>
+        </div>
+        <div class="card-back">
+          <div class="card-symbol">{{card.symbol}}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 遊戲結束畫面 -->
+    <div class="game-over" *ngIf="gameOver">
+      <h2>🎉 恭喜完成！</h2>
+      <div class="final-stats">
+        <div class="final-stat">
+          <span class="final-stat-label">最終得分</span>
+          <span class="final-stat-value">{{score}}</span>
+        </div>
+        <div class="final-stat">
+          <span class="final-stat-label">總移動次數</span>
+          <span class="final-stat-value">{{moves}}</span>
+        </div>
+        <div class="final-stat">
+          <span class="final-stat-label">完成時間</span>
+          <span class="final-stat-value">{{formatTime(gameTime)}}</span>
+        </div>
+        <div class="final-stat">
+          <span class="final-stat-label">評價</span>
+          <span class="final-stat-value" [style.color]="getDifficultyColor()">
+            {{getDifficulty()}}
+          </span>
+        </div>
+      </div>
+      <button class="retry-btn" (click)="startGame()">再試一次</button>
+    </div>
+  </div>
+
+  <div class="game-controls">
+    <div class="control-instructions">
+      <p>🎯 點擊卡片翻開，找到相同的兩張卡片</p>
+      <p>🧠 考驗你的記憶力，用最少的移動次數完成遊戲</p>
+      <p>⏰ 完成時間越短，額外獎勵越多</p>
+    </div>
+    
+    <div class="game-buttons">
+      <button (click)="startGame()" 
+              [disabled]="gameRunning"
+              class="game-btn start-btn">
+        {{gameRunning ? '遊戲進行中' : '開始遊戲'}}
+      </button>
+      <button (click)="resetGame()" 
+              class="game-btn reset-btn">
+        重新開始
+      </button>
+    </div>
+  </div>
+</div>

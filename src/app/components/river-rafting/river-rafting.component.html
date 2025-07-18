@@ -1,0 +1,109 @@
+<!-- 漂漂河小遊戲 -->
+
+<div class="game-container" 
+     tabindex="0" 
+     (keydown)="onKeyDown($event)" 
+     (keyup)="onKeyUp($event)">
+  
+  <div class="game-header">
+    <button class="back-btn" (click)="backToMenu()">← 返回遊戲選單</button>
+    <h1>🏊‍♂️ 漂漂河小遊戲 🚣‍♀️</h1>
+    <div class="game-info">
+      <div class="score">得分: {{score}}</div>
+      <div class="time">時間: {{gameTime}}s</div>
+    </div>
+  </div>
+
+  <div class="river-container">
+    <svg class="river" viewBox="0 0 800 600">
+      <!-- 外圈河道 -->
+      <path class="river-path outer-path" 
+            d="M 400 100 
+               A 250 250 0 0 1 400 500
+               A 250 250 0 0 1 400 100 Z"
+            fill="none" 
+            stroke="#4a90e2" 
+            stroke-width="120"/>
+      
+      <!-- 內圈河道 -->
+      <path class="river-path inner-path" 
+            d="M 400 150 
+               A 200 200 0 0 1 400 450
+               A 200 200 0 0 1 400 150 Z"
+            fill="none" 
+            stroke="#87ceeb" 
+            stroke-width="80"/>
+
+      <!-- 水流效果 -->
+      <g class="water-flow">
+        @for (bubble of waterBubbles; track bubble.x) {
+          <circle [attr.cx]="bubble.x" 
+                  [attr.cy]="bubble.y" 
+                  [attr.r]="bubble.size"
+                  fill="rgba(255, 255, 255, 0.6)"
+                  class="water-bubble">
+          </circle>
+        }
+      </g>
+
+      <!-- 小船 -->
+      <g class="boat" 
+         [attr.transform]="'translate(' + boat.x + ',' + boat.y + ') rotate(' + boat.rotation + ')'">
+        <path d="M -15 -8 L 15 -8 L 12 8 L -12 8 Z" 
+              fill="#8B4513" 
+              stroke="#654321" 
+              stroke-width="2"/>
+        <path d="M -10 -8 L 10 -8 L 8 0 L -8 0 Z" 
+              fill="#DEB887"/>
+        <circle cx="0" cy="-4" r="3" fill="#FF6B6B"/>
+      </g>
+
+      <!-- 障礙物 -->
+      <g class="obstacles">
+        @for (obstacle of obstacles; track obstacle.x) {
+          <circle [attr.cx]="obstacle.x" 
+                  [attr.cy]="obstacle.y" 
+                  [attr.r]="obstacle.size"
+                  fill="#8B4513"
+                  stroke="#654321"
+                  stroke-width="2"
+                  class="obstacle">
+          </circle>
+        }
+      </g>
+
+      <!-- 收集物品 -->
+      <g class="collectibles">
+        @for (item of collectibles; track item.x) {
+          <circle [attr.cx]="item.x" 
+                  [attr.cy]="item.y" 
+                  [attr.r]="8"
+                  fill="#FFD700"
+                  stroke="#FFA500"
+                  stroke-width="2"
+                  class="collectible">
+          </circle>
+        }
+      </g>
+    </svg>
+  </div>
+
+  <div class="game-controls">
+    <div class="control-instructions">
+      <p>🎮 使用方向鍵控制小船</p>
+      <p>🏆 收集金幣得分，避開障礙物</p>
+      <p>🌊 跟著水流方向划船更快</p>
+    </div>
+    <div class="game-buttons">
+      <button (click)="startGame()" 
+              [disabled]="gameRunning"
+              class="game-btn start-btn">
+        {{gameRunning ? '遊戲進行中' : '開始遊戲'}}
+      </button>
+      <button (click)="resetGame()" 
+              class="game-btn reset-btn">
+        重新開始
+      </button>
+    </div>
+  </div>
+</div>

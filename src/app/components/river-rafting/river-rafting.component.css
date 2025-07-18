@@ -1,0 +1,311 @@
+.game-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+  font-family: 'Inter', sans-serif;
+  overflow: auto;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.game-container:focus {
+  outline: none;
+}
+
+.game-header {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.back-btn:hover {
+  background: #5a67d8;
+  transform: translateY(-50%) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.game-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #2C5282;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 10px;
+}
+
+.score, .time {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2C5282;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.river-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 0;
+}
+
+.river {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.river-path {
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+.outer-path {
+  animation: waterFlow 10s linear infinite;
+}
+
+.inner-path {
+  animation: waterFlow 8s linear infinite reverse;
+}
+
+.water-bubble {
+  animation: bubbleFloat 3s ease-in-out infinite;
+}
+
+.boat {
+  transition: transform 0.1s ease;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.obstacle {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.collectible {
+  animation: goldShine 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(255,215,0,0.5));
+}
+
+.game-controls {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.control-instructions {
+  margin-bottom: 20px;
+}
+
+.control-instructions p {
+  margin: 8px 0;
+  font-size: 1.1rem;
+  color: #2C5282;
+  font-weight: 500;
+}
+
+.game-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.game-btn {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.start-btn {
+  background: linear-gradient(45deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.start-btn:hover:not(:disabled) {
+  background: linear-gradient(45deg, #45a049, #3d8b40);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.start-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.reset-btn {
+  background: linear-gradient(45deg, #FF6B6B, #ee5a5a);
+  color: white;
+}
+
+.reset-btn:hover {
+  background: linear-gradient(45deg, #ee5a5a, #e04848);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* 動畫效果 */
+@keyframes waterFlow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 200; }
+}
+
+@keyframes bubbleFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-10px); opacity: 0.9; }
+}
+
+@keyframes goldShine {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .game-header {
+    padding: 10px;
+  }
+  
+  .back-btn {
+    left: 10px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .game-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .game-info {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .score, .time {
+    font-size: 1rem;
+    padding: 6px 12px;
+  }
+  
+  .river-container {
+    padding: 15px;
+  }
+  
+  .game-controls {
+    padding: 15px;
+  }
+  
+  .control-instructions p {
+    font-size: 1rem;
+  }
+  
+  .game-buttons {
+    gap: 15px;
+  }
+  
+  .game-btn {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header h1 {
+    font-size: 1.2rem;
+  }
+  
+  .back-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .game-info {
+    gap: 15px;
+  }
+  
+  .score, .time {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+  }
+  
+  .river-container {
+    padding: 10px;
+  }
+  
+  .game-controls {
+    padding: 10px;
+  }
+  
+  .control-instructions p {
+    font-size: 0.9rem;
+    margin: 5px 0;
+  }
+  
+  .game-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .game-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    min-width: 150px;
+  }
+}
+
+/* 高度較小的螢幕 */
+@media (max-height: 600px) {
+  .game-container {
+    min-height: 100vh;
+  }
+  
+  .river-container {
+    padding: 10px;
+  }
+  
+  .game-header {
+    padding: 10px;
+  }
+  
+  .game-controls {
+    padding: 10px;
+  }
+  
+  .control-instructions p {
+    margin: 5px 0;
+  }
+}
