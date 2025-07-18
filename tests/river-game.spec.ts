@@ -78,4 +78,50 @@ test.describe('漂漂河小遊戲測試', () => {
     await expect(page.locator('.game-container')).toBeVisible();
     await expect(page.locator('.boat')).toBeVisible();
   });
+
+  test('響應式設計測試', async ({ page }) => {
+    // 測試桌面版本
+    await page.setViewportSize({ width: 1200, height: 800 });
+    await expect(page.locator('.game-container')).toBeVisible();
+    await expect(page.locator('.game-controls')).toBeVisible();
+    
+    // 測試平板版本
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await expect(page.locator('.game-container')).toBeVisible();
+    await expect(page.locator('.game-controls')).toBeVisible();
+    
+    // 測試手機版本
+    await page.setViewportSize({ width: 375, height: 667 });
+    await expect(page.locator('.game-container')).toBeVisible();
+    await expect(page.locator('.game-controls')).toBeVisible();
+    
+    // 檢查按鈕是否可見
+    await expect(page.locator('.start-btn')).toBeVisible();
+    await expect(page.locator('.reset-btn')).toBeVisible();
+  });
+
+  test('按鈕可見性測試', async ({ page }) => {
+    // 檢查按鈕是否在視窗範圍內
+    const startBtn = page.locator('.start-btn');
+    const resetBtn = page.locator('.reset-btn');
+    
+    await expect(startBtn).toBeVisible();
+    await expect(resetBtn).toBeVisible();
+    
+    // 獲取按鈕位置
+    const startBtnBox = await startBtn.boundingBox();
+    const resetBtnBox = await resetBtn.boundingBox();
+    
+    // 檢查按鈕是否在視窗內
+    expect(startBtnBox).not.toBeNull();
+    expect(resetBtnBox).not.toBeNull();
+    
+    if (startBtnBox && resetBtnBox) {
+      const viewportSize = page.viewportSize();
+      if (viewportSize) {
+        expect(startBtnBox.y + startBtnBox.height).toBeLessThanOrEqual(viewportSize.height);
+        expect(resetBtnBox.y + resetBtnBox.height).toBeLessThanOrEqual(viewportSize.height);
+      }
+    }
+  });
 });
