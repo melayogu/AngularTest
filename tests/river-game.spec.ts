@@ -1,127 +1,78 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('漂漂河小遊戲測試', () => {
+test.describe('遊戲中心基本測試', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:4200/');
   });
 
-  test('遊戲載入測試', async ({ page }) => {
-    // 檢查遊戲標題是否存在
-    await expect(page.locator('h1')).toHaveText('🏊‍♂️ 漂漂河小遊戲 🚣‍♀️');
+  test('頁面載入測試', async ({ page }) => {
+    // 檢查頁面標題
+    await expect(page.locator('h1')).toContainText('遊戲中心');
     
-    // 檢查遊戲容器是否存在
-    await expect(page.locator('.game-container')).toBeVisible();
-    
-    // 檢查得分顯示
-    await expect(page.locator('.score')).toContainText('得分: 0');
-    
-    // 檢查時間顯示
-    await expect(page.locator('.time')).toContainText('時間: 0s');
-    
-    // 檢查河流 SVG 是否存在
-    await expect(page.locator('.river')).toBeVisible();
+    // 檢查遊戲選擇器容器
+    await expect(page.locator('.game-selector-container')).toBeVisible();
   });
 
   test('遊戲元素顯示測試', async ({ page }) => {
-    // 檢查河道路徑是否存在
-    await expect(page.locator('.river-path.outer-path')).toBeVisible();
-    await expect(page.locator('.river-path.inner-path')).toBeVisible();
+    // 檢查篩選器是否存在
+    await expect(page.locator('.filters')).toBeVisible();
     
-    // 檢查小船是否存在
-    await expect(page.locator('.boat')).toBeVisible();
+    // 檢查遊戲網格是否存在
+    await expect(page.locator('.games-grid')).toBeVisible();
     
-    // 檢查水流效果容器是否存在
-    await expect(page.locator('.water-flow')).toBeVisible();
+    // 檢查遊戲卡片是否存在（使用 first() 只檢查第一個）
+    await expect(page.locator('.game-card').first()).toBeVisible();
   });
 
   test('遊戲交互測試', async ({ page }) => {
-    // 檢查遊戲容器是否可以獲得焦點
-    await page.locator('.game-container').focus();
+    // 檢查篩選器是否可以交互
+    const categorySelect = page.locator('select').first();
+    await expect(categorySelect).toBeVisible();
     
-    // 測試鍵盤控制（模擬按鍵）
-    await page.keyboard.press('ArrowLeft');
-    await page.waitForTimeout(100);
+    // 選擇不同的分類
+    await categorySelect.selectOption('action');
+    await page.waitForTimeout(500);
     
-    await page.keyboard.press('ArrowRight');
-    await page.waitForTimeout(100);
-    
-    await page.keyboard.press('ArrowUp');
-    await page.waitForTimeout(100);
-    
-    await page.keyboard.press('ArrowDown');
-    await page.waitForTimeout(100);
-    
-    // 檢查遊戲是否還在運行
-    await expect(page.locator('.game-container')).toBeVisible();
+    // 檢查遊戲卡片是否仍然可見（使用 first() 只檢查第一個）
+    await expect(page.locator('.game-card').first()).toBeVisible();
   });
 
-  test('遊戲資訊顯示測試', async ({ page }) => {
-    // 檢查遊戲資訊區域
-    await expect(page.locator('.game-info')).toBeVisible();
+  test('遊戲統計顯示測試', async ({ page }) => {
+    // 檢查統計資訊區域
+    await expect(page.locator('.stats')).toBeVisible();
     
-    // 檢查得分和時間的初始值
-    await expect(page.locator('.score')).toContainText('得分:');
-    await expect(page.locator('.time')).toContainText('時間:');
-    
-    // 檢查遊戲標題區域
-    await expect(page.locator('.game-header')).toBeVisible();
+    // 檢查統計數字（使用 first() 只檢查第一個）
+    await expect(page.locator('.stat-number').first()).toBeVisible();
+    await expect(page.locator('.stat-label').first()).toBeVisible();
   });
 
-  test('遊戲長時間運行測試', async ({ page }) => {
-    // 檢查遊戲初始狀態
-    await expect(page.locator('.game-container')).toBeVisible();
-    
-    // 讓遊戲運行一段時間
-    await page.waitForTimeout(3000);
-    
-    // 檢查遊戲是否仍然正常運行
-    await expect(page.locator('.game-container')).toBeVisible();
-    await expect(page.locator('.boat')).toBeVisible();
+  test('遊戲卡片互動測試', async ({ page }) => {
+    // 檢查遊戲卡片基本資訊（使用 first() 只檢查第一個）
+    await expect(page.locator('.game-card').first()).toBeVisible();
+    await expect(page.locator('.game-info').first()).toBeVisible();
+    await expect(page.locator('.game-meta').first()).toBeVisible();
   });
 
   test('響應式設計測試', async ({ page }) => {
     // 測試桌面版本
     await page.setViewportSize({ width: 1200, height: 800 });
-    await expect(page.locator('.game-container')).toBeVisible();
-    await expect(page.locator('.game-controls')).toBeVisible();
+    await expect(page.locator('.game-selector-container')).toBeVisible();
     
     // 測試平板版本
     await page.setViewportSize({ width: 768, height: 1024 });
-    await expect(page.locator('.game-container')).toBeVisible();
-    await expect(page.locator('.game-controls')).toBeVisible();
+    await expect(page.locator('.game-selector-container')).toBeVisible();
     
     // 測試手機版本
     await page.setViewportSize({ width: 375, height: 667 });
-    await expect(page.locator('.game-container')).toBeVisible();
-    await expect(page.locator('.game-controls')).toBeVisible();
-    
-    // 檢查按鈕是否可見
-    await expect(page.locator('.start-btn')).toBeVisible();
-    await expect(page.locator('.reset-btn')).toBeVisible();
+    await expect(page.locator('.game-selector-container')).toBeVisible();
   });
 
   test('按鈕可見性測試', async ({ page }) => {
-    // 檢查按鈕是否在視窗範圍內
-    const startBtn = page.locator('.start-btn');
-    const resetBtn = page.locator('.reset-btn');
+    // 檢查遊戲卡片中的按鈕（使用 first() 只檢查第一個）
+    const playBtn = page.locator('.btn-play').first();
+    await expect(playBtn).toBeVisible();
     
-    await expect(startBtn).toBeVisible();
-    await expect(resetBtn).toBeVisible();
-    
-    // 獲取按鈕位置
-    const startBtnBox = await startBtn.boundingBox();
-    const resetBtnBox = await resetBtn.boundingBox();
-    
-    // 檢查按鈕是否在視窗內
-    expect(startBtnBox).not.toBeNull();
-    expect(resetBtnBox).not.toBeNull();
-    
-    if (startBtnBox && resetBtnBox) {
-      const viewportSize = page.viewportSize();
-      if (viewportSize) {
-        expect(startBtnBox.y + startBtnBox.height).toBeLessThanOrEqual(viewportSize.height);
-        expect(resetBtnBox.y + resetBtnBox.height).toBeLessThanOrEqual(viewportSize.height);
-      }
-    }
+    // 檢查按鈕文字
+    await expect(playBtn).toContainText('開始遊戲');
   });
 });
