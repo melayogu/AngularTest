@@ -1,4 +1,4 @@
-name: Node.js CI with Commitlint + Angular Deploy
+name: Master Branch CI & Deploy
 
 on:
   push:
