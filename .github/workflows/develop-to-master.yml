@@ -1,0 +1,114 @@
+name: Develop to Master Auto-Merge & Deploy
+
+on:
+  push:
+    branches: [ develop ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  # 🧪 測試階段：在 develop 分支執行完整測試
+  test_develop:
+    name: 🧪 Test on Develop Branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v3
+        with:
+          ref: develop
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
+      - name: Start dev server for E2E tests
+        run: |
+          npm run start &
+          npx wait-on http://localhost:4200
+
+      - name: Run E2E tests
+        run: npx playwright test
+
+  # 🔄 合併階段：將 develop 合併到 master
+  merge_to_master:
+    name: 🔄 Merge develop → master
+    runs-on: ubuntu-latest
+    needs: test_develop
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge develop to master
+        run: |
+          git checkout master
+          git pull origin master
+          git merge origin/develop --no-ff -m "chore: auto-merge develop to master"
+          git push origin master
+
+  # 🚀 部署階段：構建並部署到 GitHub Pages
+  deploy_to_pages:
+    name: 🚀 Build & Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: merge_to_master
+
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v3
+        with:
+          ref: master
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular app
+        run: npm run build -- --configuration production
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: dist/my-angular-app/browser
+          clean: true
+
+  # 🔔 通知階段：發送成功通知
+  notify_success:
+    name: 🔔 Send Success Notifications
+    runs-on: ubuntu-latest
+    needs: deploy_to_pages
+    if: success()
+
+    steps:
+      - name: Send notification
+        run: |
+          echo "✅ Pipeline completed successfully!"
+          echo "📂 develop → master → gh-pages"
+          echo "🚀 Deployed at: $(date)"
