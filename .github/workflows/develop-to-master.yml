@@ -99,16 +99,31 @@ jobs:
           folder: dist/my-angular-app/browser
           clean: true
 
-  # 🔔 通知階段：發送成功通知
-  notify_success:
-    name: 🔔 Send Success Notifications
+  # 🔔 通知階段：合併成功通知
+  notify_merge_success:
+    name: 🔔 Merge Success Notification
+    runs-on: ubuntu-latest
+    needs: merge_to_master
+    if: success()
+
+    steps:
+      - name: Send merge success notification
+        run: |
+          echo "✅ 合併成功！develop → master"
+          echo "📅 合併時間: $(date)"
+          echo "🔄 分支合併已完成，準備開始部署..."
+
+  # 🔔 通知階段：部署成功通知
+  notify_deploy_success:
+    name: 🔔 Deploy Success Notification
     runs-on: ubuntu-latest
     needs: deploy_to_pages
     if: success()
 
     steps:
-      - name: Send notification
+      - name: Send deploy success notification
         run: |
-          echo "✅ Pipeline completed successfully!"
-          echo "📂 develop → master → gh-pages"
-          echo "🚀 Deployed at: $(date)"
+          echo "� 部署成功！已部署到 GitHub Pages"
+          echo "📅 部署時間: $(date)"
+          echo "🌐 網站已更新並可以訪問"
+          echo "� 完整流程: develop → master → gh-pages"
