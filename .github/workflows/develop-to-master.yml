@@ -145,15 +145,38 @@ jobs:
       - name: Send Discord Merge Success Notification
         continue-on-error: true
         run: |
+          echo "🔍 開始 Discord 合併通知調試..."
+          
+          # 檢查必要的 secrets 是否存在
+          if [ -z "${{ secrets.DISCORD_WEBHOOK_URL }}" ]; then
+            echo "❌ DISCORD_WEBHOOK_URL secret 不存在或為空"
+            exit 0
+          fi
+          
+          echo "✅ Discord webhook 檢查通過"
           echo "⏳ Waiting 5 seconds before sending Discord message..."
           sleep 5
 
-          DISCORD_MESSAGE="🔄 合併成功！develop → master\n- Commit: ${{ github.sha }}\n- Branch: ${{ github.ref_name }}\n- Workflow: ${{ github.workflow }}\n- 時間: $(date)\n- 狀態: 合併完成，準備部署..."
+          DISCORD_MESSAGE="🔄 合併成功！develop → master\n- Commit: ${{ github.sha }}\n- Branch: ${{ github.ref_name }}\n- Workflow: ${{ github.workflow }}\n- 狀態: 合併完成，準備部署..."
 
-          curl -H "Content-Type: application/json" \
+          echo "📝 準備發送的 Discord 合併訊息:"
+          echo "內容: $DISCORD_MESSAGE"
+          
+          echo "🚀 發送 Discord 合併通知..."
+          RESPONSE=$(curl -w "\nHTTP_CODE:%{http_code}\n" -H "Content-Type: application/json" \
             -X POST \
             -d "{\"content\": \"$DISCORD_MESSAGE\"}" \
-            ${{ secrets.DISCORD_WEBHOOK_URL }} || true
+            ${{ secrets.DISCORD_WEBHOOK_URL }} 2>&1)
+          
+          echo "📨 Discord API 回應:"
+          echo "$RESPONSE"
+          
+          HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "204" ]; then
+            echo "✅ Discord 合併通知發送成功！"
+          else
+            echo "❌ Discord 合併通知發送失敗，HTTP 狀態碼: $HTTP_CODE"
+          fi
 
   # 🚀 部署階段：構建並部署到 GitHub Pages
   deploy_to_pages:
@@ -269,13 +292,36 @@ jobs:
       - name: Send Discord Deploy Success Notification
         continue-on-error: true
         run: |
+          echo "🔍 開始 Discord 部署通知調試..."
+          
+          # 檢查必要的 secrets 是否存在
+          if [ -z "${{ secrets.DISCORD_WEBHOOK_URL }}" ]; then
+            echo "❌ DISCORD_WEBHOOK_URL secret 不存在或為空"
+            exit 0
+          fi
+          
+          echo "✅ Discord webhook 檢查通過"
           echo "⏳ Waiting 5 seconds before sending Discord message..."
           sleep 5
 
           REPO_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
-          DISCORD_MESSAGE="🚀 部署成功！已部署到 GitHub Pages\n- Commit: ${{ github.sha }}\n- Branch: ${{ github.ref_name }}\n- Workflow: ${{ github.workflow }}\n- 網站地址: $REPO_URL\n- 時間: $(date)\n- 狀態: 部署完成！🎮"
+          DISCORD_MESSAGE="🚀 部署成功！已部署到 GitHub Pages\n- Commit: ${{ github.sha }}\n- Branch: ${{ github.ref_name }}\n- Workflow: ${{ github.workflow }}\n- 網站地址: $REPO_URL\n- 狀態: 部署完成！🎮"
 
-          curl -H "Content-Type: application/json" \
+          echo "📝 準備發送的 Discord 部署訊息:"
+          echo "內容: $DISCORD_MESSAGE"
+          
+          echo "🚀 發送 Discord 部署通知..."
+          RESPONSE=$(curl -w "\nHTTP_CODE:%{http_code}\n" -H "Content-Type: application/json" \
             -X POST \
             -d "{\"content\": \"$DISCORD_MESSAGE\"}" \
-            ${{ secrets.DISCORD_WEBHOOK_URL }} || true
+            ${{ secrets.DISCORD_WEBHOOK_URL }} 2>&1)
+          
+          echo "📨 Discord API 回應:"
+          echo "$RESPONSE"
+          
+          HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "204" ]; then
+            echo "✅ Discord 部署通知發送成功！"
+          else
+            echo "❌ Discord 部署通知發送失敗，HTTP 狀態碼: $HTTP_CODE"
+          fi
