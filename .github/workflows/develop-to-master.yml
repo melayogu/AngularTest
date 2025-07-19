@@ -79,6 +79,22 @@ jobs:
       - name: Send LINE Merge Success Notification
         continue-on-error: true
         run: |
+          echo "🔍 開始 LINE 通知調試..."
+          echo "LINE_USER_ID 長度: ${#LINE_USER_ID}"
+          echo "LINE_CHANNEL_ACCESS_TOKEN 長度: ${#LINE_CHANNEL_ACCESS_TOKEN}"
+          
+          # 檢查必要的 secrets 是否存在
+          if [ -z "${{ secrets.LINE_USER_ID }}" ]; then
+            echo "❌ LINE_USER_ID secret 不存在或為空"
+            exit 0
+          fi
+          
+          if [ -z "${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}" ]; then
+            echo "❌ LINE_CHANNEL_ACCESS_TOKEN secret 不存在或為空"
+            exit 0
+          fi
+          
+          echo "✅ LINE secrets 檢查通過"
           echo "⏳ Waiting 5 seconds before sending LINE message..."
           sleep 5
 
@@ -92,15 +108,29 @@ jobs:
               messages: [
                 {
                   type: "text",
-                  text: "🔄 合併成功！develop → master\n- Commit: \($commit)\n- Branch: \($branch)\n- Workflow: \($workflow)\n- 時間: '$(date)'\n- 狀態: 合併完成，準備部署..."
+                  text: "🔄 合併成功！develop → master\n- Commit: \($commit)\n- Branch: \($branch)\n- Workflow: \($workflow)\n- 狀態: 合併完成，準備部署..."
                 }
               ]
             }')
 
-          curl -X POST https://api.line.me/v2/bot/message/push \
+          echo "📝 準備發送的 LINE 訊息:"
+          echo "$MESSAGE" | jq .
+          
+          echo "🚀 發送 LINE 通知..."
+          RESPONSE=$(curl -w "\nHTTP_CODE:%{http_code}\n" -X POST https://api.line.me/v2/bot/message/push \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}" \
-            -d "$MESSAGE" || true
+            -d "$MESSAGE" 2>&1)
+          
+          echo "📨 LINE API 回應:"
+          echo "$RESPONSE"
+          
+          HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ LINE 通知發送成功！"
+          else
+            echo "❌ LINE 通知發送失敗，HTTP 狀態碼: $HTTP_CODE"
+          fi
 
       - name: Send Telegram Merge Success Notification
         continue-on-error: true
@@ -172,6 +202,20 @@ jobs:
       - name: Send LINE Deploy Success Notification
         continue-on-error: true
         run: |
+          echo "🔍 開始 LINE 部署通知調試..."
+          
+          # 檢查必要的 secrets 是否存在
+          if [ -z "${{ secrets.LINE_USER_ID }}" ]; then
+            echo "❌ LINE_USER_ID secret 不存在或為空"
+            exit 0
+          fi
+          
+          if [ -z "${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}" ]; then
+            echo "❌ LINE_CHANNEL_ACCESS_TOKEN secret 不存在或為空"
+            exit 0
+          fi
+          
+          echo "✅ LINE secrets 檢查通過"
           echo "⏳ Waiting 5 seconds before sending LINE message..."
           sleep 5
 
@@ -187,15 +231,29 @@ jobs:
               messages: [
                 {
                   type: "text",
-                  text: "🚀 部署成功！已部署到 GitHub Pages\n- Commit: \($commit)\n- Branch: \($branch)\n- Workflow: \($workflow)\n- 網站地址: \($url)\n- 時間: '$(date)'\n- 狀態: 部署完成！🎮"
+                  text: "🚀 部署成功！已部署到 GitHub Pages\n- Commit: \($commit)\n- Branch: \($branch)\n- Workflow: \($workflow)\n- 網站地址: \($url)\n- 狀態: 部署完成！🎮"
                 }
               ]
             }')
 
-          curl -X POST https://api.line.me/v2/bot/message/push \
+          echo "📝 準備發送的 LINE 部署訊息:"
+          echo "$MESSAGE" | jq .
+          
+          echo "🚀 發送 LINE 部署通知..."
+          RESPONSE=$(curl -w "\nHTTP_CODE:%{http_code}\n" -X POST https://api.line.me/v2/bot/message/push \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}" \
-            -d "$MESSAGE" || true
+            -d "$MESSAGE" 2>&1)
+          
+          echo "📨 LINE API 回應:"
+          echo "$RESPONSE"
+          
+          HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ LINE 部署通知發送成功！"
+          else
+            echo "❌ LINE 部署通知發送失敗，HTTP 狀態碼: $HTTP_CODE"
+          fi
 
       - name: Send Telegram Deploy Success Notification
         continue-on-error: true
