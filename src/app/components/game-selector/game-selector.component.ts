@@ -74,6 +74,15 @@ export class GameSelectorComponent {
       route: '/puzzle-2048',
       difficulty: 'medium',
       category: 'puzzle'
+    },
+    {
+      id: 'metro-tile-game',
+      name: '🚇 台北捷運地磚',
+      description: '旋轉地磚建立捷運路線，引導乘客到達出口',
+      icon: '🚆',
+      route: '/metro-tile-game',
+      difficulty: 'medium',
+      category: 'puzzle'
     }
   ];
 
