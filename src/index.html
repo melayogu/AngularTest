@@ -6,6 +6,18 @@
   <base href="/AngularTest/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- 處理直接訪問深層路由的重定向腳本 -->
+  <script type="text/javascript">
+    (function() {
+      // 檢查是否有重定向參數
+      var redirect = new URLSearchParams(window.location.search).get('redirect');
+      if (redirect) {
+        // 移除查詢參數並導航到目標路由
+        history.replaceState(null, null, '/AngularTest' + redirect);
+      }
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>
