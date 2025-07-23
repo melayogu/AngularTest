@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>🎮 遊戲中心 - 重新導向中...</title>
+  <script type="text/javascript">
+    // GitHub Pages 單頁應用程式重定向解決方案
+    // 將 404 頁面重定向到 index.html，並保持路由信息
+    var pathSegments = location.pathname.split('/').filter(function(segment) {
+      return segment !== '';
+    });
+
+    // 移除基礎路徑 'AngularTest'
+    if (pathSegments[0] === 'AngularTest') {
+      pathSegments.shift();
+    }
+
+    // 如果有剩餘的路徑段，將其作為查詢參數傳遞
+    var redirectPath = '/AngularTest/';
+    if (pathSegments.length > 0) {
+      redirectPath += '?redirect=' + encodeURIComponent('/' + pathSegments.join('/'));
+    }
+
+    location.replace(redirectPath);
+  </script>
+</head>
+<body>
+  <div style="text-align: center; margin-top: 50px; font-family: 'Microsoft JhengHei', sans-serif;">
+    <h2>🎮 遊戲中心</h2>
+    <p>正在重新導向到遊戲頁面...</p>
+    <div style="margin: 20px;">
+      <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #0070BD; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>🐍 貪吃蛇遊戲</title>
+  <meta name="description" content="經典貪吃蛇遊戲，收集食物讓蛇變長">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="/AngularTest/favicon.ico">
+
+  <meta property="og:title" content="🐍 貪吃蛇遊戲">
+  <meta property="og:description" content="經典貪吃蛇遊戲，收集食物讓蛇變長">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://melayogu.github.io/AngularTest/snake-game">
+
+  <script type="text/javascript">
+    window.location.replace('/AngularTest/?redirect=/snake-game');
+  </script>
+
+  <style>
+    body {
+      font-family: 'Microsoft JhengHei', sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+    }
+    .loading {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #2196F3;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h2>🐍 貪吃蛇遊戲</h2>
+  <p>正在載入遊戲...</p>
+  <div class="loading"></div>
+  <p><a href="/AngularTest/">如果沒有自動跳轉，請點擊這裡</a></p>
+</body>
+</html>
