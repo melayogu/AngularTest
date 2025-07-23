@@ -2,32 +2,31 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <title>🐍 貪吃蛇遊戲 - 遊戲中心</title>
-  <meta name="description" content="經典貪吃蛇遊戲重現！控制小蛇收集食物讓身體變長，避免撞到牆壁或自己。支援鍵盤和觸控操作，挑戰你的反應速度！">
-  <meta name="keywords" content="貪吃蛇,Snake,經典遊戲,線上遊戲,免費遊戲,反應遊戲">
+  <title>🏊‍♂️ 漂漂河小遊戲 - 遊戲中心</title>
+  <meta name="description" content="操控小船在河道中收集金幣，避開障礙物！精美的水波動畫效果，挑戰你的操作技巧和反應速度。">
+  <meta name="keywords" content="漂漂河,小船遊戲,收集遊戲,線上遊戲,免費遊戲,動作遊戲">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="/AngularTest/favicon.ico">
 
   <!-- Open Graph 標籤 -->
-  <meta property="og:title" content="🐍 貪吃蛇遊戲">
-  <meta property="og:description" content="經典貪吃蛇遊戲重現！控制小蛇收集食物讓身體變長，避免撞到牆壁或自己。">
+  <meta property="og:title" content="🏊‍♂️ 漂漂河小遊戲">
+  <meta property="og:description" content="操控小船在河道中收集金幣，避開障礙物！精美的水波動畫效果，挑戰你的操作技巧。">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://melayogu.github.io/AngularTest/snake-game">
+  <meta property="og:url" content="https://melayogu.github.io/AngularTest/river-rafting">
   <meta property="og:site_name" content="遊戲中心">
   <meta property="og:locale" content="zh_TW">
 
   <!-- Twitter Card 標籤 -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="🐍 貪吃蛇遊戲">
-  <meta name="twitter:description" content="經典貪吃蛇遊戲重現！控制小蛇收集食物讓身體變長，避免撞到牆壁或自己。">
+  <meta name="twitter:title" content="🏊‍♂️ 漂漂河小遊戲">
+  <meta name="twitter:description" content="操控小船在河道中收集金幣，避開障礙物！精美的水波動畫效果。">
 
-  <!-- 延遲重定向，給爬蟲時間讀取標籤 -->
   <script type="text/javascript">
     var isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
 
     if (!isBot) {
       setTimeout(function() {
-        window.location.replace('/AngularTest/?redirect=/snake-game');
+        window.location.replace('/AngularTest/?redirect=/river-rafting');
       }, 2000);
     }
   </script>
@@ -37,7 +36,7 @@
       font-family: 'Microsoft JhengHei', sans-serif;
       margin: 0;
       padding: 20px;
-      background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+      background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
       min-height: 100vh;
       line-height: 1.6;
       color: white;
@@ -55,15 +54,21 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       margin: 20px 0;
     }
-    .snake-demo {
-      font-family: monospace;
-      font-size: 20px;
-      letter-spacing: 2px;
+    .river-demo {
+      font-size: 24px;
       margin: 20px 0;
-      background: #1B5E20;
-      color: #4CAF50;
+      background: #0D47A1;
+      color: #64B5F6;
       padding: 15px;
       border-radius: 8px;
+      overflow: hidden;
+    }
+    .wave {
+      animation: wave 2s infinite;
+    }
+    @keyframes wave {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(10px); }
     }
     .features {
       text-align: left;
@@ -79,7 +84,7 @@
       border-bottom: 1px solid #eee;
     }
     .play-btn {
-      background: #4CAF50;
+      background: #1976D2;
       color: white;
       border: none;
       padding: 15px 30px;
@@ -91,14 +96,14 @@
       display: inline-block;
     }
     .play-btn:hover {
-      background: #45a049;
+      background: #1565C0;
     }
     .loading {
       display: inline-block;
       width: 30px;
       height: 30px;
       border: 3px solid #f3f3f3;
-      border-top: 3px solid #4CAF50;
+      border-top: 3px solid #1976D2;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-left: 10px;
@@ -112,27 +117,27 @@
 <body>
   <div class="container">
     <div class="game-preview">
-      <h1>🐍 貪吃蛇遊戲</h1>
-      <p>重溫經典！控制小蛇在遊戲場域中覓食成長</p>
+      <h1>🏊‍♂️ 漂漂河小遊戲</h1>
+      <p>駕駛小船在激流中冒險，收集寶藏避開危險！</p>
 
-      <div class="snake-demo">
-        ●●●●●○ ← 🍎
+      <div class="river-demo">
+        <div class="wave">🚣‍♀️ ～～～ 💰 ～～～ ⚠️ ～～～</div>
       </div>
 
       <div class="features">
         <h3>🎯 遊戲特色</h3>
         <ul>
-          <li>🎮 方向鍵或滑動控制</li>
-          <li>🍎 收集食物讓蛇身變長</li>
-          <li>⚡ 速度會隨分數增加</li>
-          <li>📱 響應式設計，支援各種裝置</li>
-          <li>🏆 即時分數統計</li>
-          <li>🎵 經典音效體驗</li>
+          <li>🚣‍♀️ 流暢的小船控制</li>
+          <li>💰 收集金幣獲得高分</li>
+          <li>⚠️ 避開各種河道障礙</li>
+          <li>🌊 真實的水流物理效果</li>
+          <li>📱 支援觸控和鍵盤操作</li>
+          <li>🏆 挑戰最高分紀錄</li>
         </ul>
       </div>
 
       <div id="game-status">
-        <a href="/AngularTest/?redirect=/snake-game" class="play-btn">
+        <a href="/AngularTest/?redirect=/river-rafting" class="play-btn">
           🎮 開始遊戲 <span class="loading" style="display: none;"></span>
         </a>
         <p><small>正在載入遊戲引擎...</small></p>
@@ -140,7 +145,7 @@
     </div>
 
     <div style="margin-top: 30px; color: rgba(255,255,255,0.8); font-size: 14px;">
-      <p>📍 更多遊戲請訪問 <a href="/AngularTest/" style="color: #81C784;">遊戲中心</a></p>
+      <p>📍 更多遊戲請訪問 <a href="/AngularTest/" style="color: #90CAF9;">遊戲中心</a></p>
     </div>
   </div>
 
