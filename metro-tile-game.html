@@ -2,38 +2,106 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <title>🚇 台北捷運地磚遊戲</title>
-  <meta name="description" content="旋轉地磚建立捷運路線，引導乘客到達出口的益智遊戲">
+  <title>🚇 台北捷運地磚遊戲 - 遊戲中心</title>
+  <meta name="description" content="體驗台灣捷運風格的走地磚益智遊戲！旋轉地磚建立捷運路線，引導乘客從起點🚇到達出口🏁。支援多種捷運線路顏色主題，挑戰你的邏輯思維！">
+  <meta name="keywords" content="台北捷運,地磚遊戲,益智遊戲,線上遊戲,免費遊戲,邏輯遊戲">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="/AngularTest/favicon.ico">
 
   <!-- Open Graph 標籤 -->
   <meta property="og:title" content="🚇 台北捷運地磚遊戲">
-  <meta property="og:description" content="旋轉地磚建立捷運路線，引導乘客到達出口的益智遊戲">
+  <meta property="og:description" content="體驗台灣捷運風格的走地磚益智遊戲！旋轉地磚建立捷運路線，引導乘客從起點到達出口。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://melayogu.github.io/AngularTest/metro-tile-game">
+  <meta property="og:site_name" content="遊戲中心">
+  <meta property="og:locale" content="zh_TW">
 
+  <!-- Twitter Card 標籤 -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🚇 台北捷運地磚遊戲">
+  <meta name="twitter:description" content="體驗台灣捷運風格的走地磚益智遊戲！旋轉地磚建立捷運路線，引導乘客從起點到達出口。">
+
+  <!-- 延遲重定向，給爬蟲時間讀取標籤 -->
   <script type="text/javascript">
-    // 立即重定向到主應用程式
-    window.location.replace('/AngularTest/?redirect=/metro-tile-game');
-  </script>
+    // 檢測是否為爬蟲
+    var isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
 
-  <style>
+    if (!isBot) {
+      // 對於真實用戶，延遲 2 秒後重定向
+      setTimeout(function() {
+        window.location.replace('/AngularTest/?redirect=/metro-tile-game');
+      }, 2000);
+    }
+  </script>  <style>
     body {
       font-family: 'Microsoft JhengHei', sans-serif;
-      text-align: center;
-      margin-top: 50px;
+      margin: 0;
+      padding: 20px;
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
       min-height: 100vh;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .game-preview {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+    }
+    .metro-colors {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .color-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .features {
+      text-align: left;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .features ul {
+      list-style: none;
+      padding: 0;
+    }
+    .features li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .play-btn {
+      background: #0070BD;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 20px 0;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .play-btn:hover {
+      background: #005a9a;
     }
     .loading {
       display: inline-block;
-      width: 40px;
-      height: 40px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #0070BD;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #0070BD;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+      margin-left: 10px;
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -42,9 +110,56 @@
   </style>
 </head>
 <body>
-  <h2>🚇 台北捷運地磚遊戲</h2>
-  <p>正在載入遊戲...</p>
-  <div class="loading"></div>
-  <p><a href="/AngularTest/">如果沒有自動跳轉，請點擊這裡</a></p>
+  <div class="container">
+    <div class="game-preview">
+      <h1>🚇 台北捷運地磚遊戲</h1>
+      <p>體驗台灣捷運風格的走地磚益智遊戲！</p>
+
+      <div class="metro-colors">
+        <span class="color-dot" style="background: #0070BD;" title="淡水信義線"></span>
+        <span class="color-dot" style="background: #D2001E;" title="板南線"></span>
+        <span class="color-dot" style="background: #7A6600;" title="文湖線"></span>
+        <span class="color-dot" style="background: #7CB342;" title="松山新店線"></span>
+        <span class="color-dot" style="background: #FF8C00;" title="中和新蘆線"></span>
+      </div>
+
+      <div class="features">
+        <h3>🎯 遊戲特色</h3>
+        <ul>
+          <li>🔄 點擊地磚旋轉方向</li>
+          <li>🚇 從捷運站出發到達終點</li>
+          <li>🎨 五種台北捷運線路顏色主題</li>
+          <li>📱 支援手機、平板、電腦</li>
+          <li>⭐ 多關卡挑戰系統</li>
+          <li>⏱️ 計時與步數統計</li>
+        </ul>
+      </div>
+
+      <div id="game-status">
+        <a href="/AngularTest/?redirect=/metro-tile-game" class="play-btn">
+          🎮 開始遊戲 <span class="loading" style="display: none;"></span>
+        </a>
+        <p><small>正在載入遊戲引擎...</small></p>
+      </div>
+    </div>
+
+    <div style="margin-top: 30px; color: #666; font-size: 14px;">
+      <p>📍 更多遊戲請訪問 <a href="/AngularTest/" style="color: #0070BD;">遊戲中心</a></p>
+    </div>
+  </div>
+
+  <script>
+    // 更新載入狀態
+    setTimeout(function() {
+      var btn = document.querySelector('.play-btn');
+      var loading = document.querySelector('.loading');
+      var status = document.querySelector('#game-status p');
+
+      if (btn && loading && status) {
+        loading.style.display = 'inline-block';
+        status.innerHTML = '<small>即將跳轉到遊戲...</small>';
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
