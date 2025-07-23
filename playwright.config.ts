@@ -10,10 +10,4 @@ export default defineConfig({
     actionTimeout: 10000, // 每個動作的超時時間
     navigationTimeout: 15000, // 導航超時時間
   },
-  webServer: {
-    command: 'npm start',
-    url: 'http://localhost:4200',
-    reuseExistingServer: !process.env['CI'],
-    timeout: 120000, // 等待開發伺服器啟動的時間
-  },
 });
