@@ -1,0 +1,104 @@
+<div class="metro-tile-game">
+  <!-- 遊戲標題 -->
+  <div class="game-header">
+    <h1 class="game-title">
+      🚇 台北捷運地磚遊戲
+    </h1>
+    <button class="back-btn" (click)="goBack()">
+      ← 返回遊戲中心
+    </button>
+  </div>
+
+  <!-- 遊戲統計 -->
+  <div class="game-stats">
+    <div class="stat-item" [style.color]="currentColor">
+      <span class="stat-label">關卡</span>
+      <span class="stat-value">{{ level }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">移動次數</span>
+      <span class="stat-value">{{ moves }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">時間</span>
+      <span class="stat-value">{{ formatTime(timeElapsed) }}</span>
+    </div>
+  </div>
+
+  <!-- 遊戲說明 -->
+  <div class="game-instructions" [ngClass]="{ 'hidden': gameStarted }">
+    <h3>🎯 遊戲說明</h3>
+    <div class="instructions-content">
+      <p>• 點擊地磚可以旋轉它們</p>
+      <p>• 建立從 🚇 (捷運站) 到 🏁 (出口) 的路徑</p>
+      <p>• 地磚會以{{ currentColor === '#0070BD' ? '淡水信義線' :
+                    currentColor === '#D2001E' ? '板南線' :
+                    currentColor === '#7A6600' ? '文湖線' :
+                    currentColor === '#7CB342' ? '松山新店線' : '中和新蘆線' }}顏色顯示路徑</p>
+      <p>• 用最少的移動次數完成挑戰！</p>
+    </div>
+  </div>
+
+  <!-- 遊戲網格 -->
+  <div class="game-grid" [style.border-color]="currentColor">
+    <div
+      *ngFor="let row of grid; let y = index"
+      class="grid-row"
+    >
+      <div
+        *ngFor="let tile of row; let x = index"
+        class="tile"
+        [ngClass]="{
+          'has-path': tile.hasPath,
+          'fixed': tile.isFixed,
+          'clickable': !tile.isFixed
+        }"
+        [style.background-color]="tile.hasPath ? currentColor : '#f5f5f5'"
+        [style.color]="tile.hasPath ? 'white' : '#666'"
+        [style.border-color]="currentColor"
+        (click)="rotateTile(x, y)"
+      >
+        <span class="tile-symbol">{{ getTileSymbol(tile) }}</span>
+        <div class="tile-rotation" *ngIf="!tile.isFixed">
+          {{ tile.rotation }}°
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 遊戲完成提示 -->
+  <div class="game-completion" *ngIf="gameWon">
+    <div class="completion-modal" [style.border-color]="currentColor">
+      <h2 [style.color]="currentColor">🎉 恭喜過關！</h2>
+      <div class="completion-stats">
+        <p>關卡：{{ level }}</p>
+        <p>移動次數：{{ moves }}</p>
+        <p>完成時間：{{ formatTime(timeElapsed) }}</p>
+        <div class="performance-rating">
+          <span *ngIf="moves <= 10" class="rating excellent">⭐⭐⭐ 捷運達人！</span>
+          <span *ngIf="moves > 10 && moves <= 20" class="rating good">⭐⭐ 表現不錯！</span>
+          <span *ngIf="moves > 20" class="rating okay">⭐ 繼續加油！</span>
+        </div>
+      </div>
+      <div class="completion-actions">
+        <button class="next-level-btn" [style.background-color]="currentColor" (click)="nextLevel()">
+          下一關
+        </button>
+        <button class="restart-btn" (click)="resetGame()">
+          重新開始
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 遊戲提示 -->
+  <div class="game-tips">
+    <h4>💡 提示</h4>
+    <ul>
+      <li>直線軌道：═ 或 ║</li>
+      <li>轉彎軌道：╚ ╗ ╝ ╔</li>
+      <li>十字軌道：╬</li>
+      <li>固定的起點 🚇 和終點 🏁 無法旋轉</li>
+    </ul>
+  </div>
+</div>
