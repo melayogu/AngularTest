@@ -6,6 +6,18 @@
   <base href="/AngularTest/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- 處理直接訪問深層路由的重定向腳本 -->
+  <script type="text/javascript">
+    (function() {
+      // 檢查是否有重定向參數
+      var redirect = new URLSearchParams(window.location.search).get('redirect');
+      if (redirect) {
+        // 移除查詢參數並導航到目標路由
+        history.replaceState(null, null, '/AngularTest' + redirect);
+      }
+    })();
+  </script>
 <style>*{box-sizing:border-box}html,body{margin:0;padding:0;height:100%;overflow-x:hidden}body{font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}app-root{display:block;height:100%}</style><link rel="stylesheet" href="styles-K2T3Q7MV.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-K2T3Q7MV.css"></noscript></head>
 <body>
   <app-root></app-root>

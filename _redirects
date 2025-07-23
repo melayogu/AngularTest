@@ -1,0 +1,4 @@
+# GitHub Pages 重定向配置
+# 將所有不存在的路徑重定向到 index.html
+
+/*    /index.html   200
