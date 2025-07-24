@@ -84,6 +84,16 @@ export class GameSelectorComponent {
       difficulty: 'medium',
       category: 'puzzle'
     }
+    ,
+    {
+      id: 'elevator-game',
+      name: '🛗 電梯上下樓',
+      description: '控制電梯上下樓，挑戰你的反應力',
+      icon: '🛗',
+      route: '/elevator-game',
+      difficulty: 'easy',
+      category: 'arcade'
+    }
   ];
 
   selectedCategory: string = 'all';

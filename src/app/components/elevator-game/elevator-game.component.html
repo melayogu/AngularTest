@@ -1,0 +1,6 @@
+<div class="elevator-game">
+  <h2>電梯上下樓遊戲</h2>
+  <div class="floor-display">目前樓層：{{ currentFloor }}</div>
+  <button (click)="goUp()" [disabled]="currentFloor === maxFloor">上樓</button>
+  <button (click)="goDown()" [disabled]="currentFloor === minFloor">下樓</button>
+</div>

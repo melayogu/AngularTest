@@ -8,6 +8,8 @@ import { SpaceInvadersComponent } from './components/space-invaders/space-invade
 import { Puzzle2048Component } from './components/puzzle-2048/puzzle-2048.component';
 import { MetroTileGameComponent } from './components/metro-tile-game/metro-tile-game.component';
 
+import { ElevatorGameComponent } from './components/elevator-game/elevator-game.component';
+
 export const routes: Routes = [
   { path: '', component: GameSelectorComponent },
   { path: 'river-rafting', component: RiverRaftingComponent },
@@ -17,5 +19,6 @@ export const routes: Routes = [
   { path: 'space-invaders', component: SpaceInvadersComponent },
   { path: 'puzzle-2048', component: Puzzle2048Component },
   { path: 'metro-tile-game', component: MetroTileGameComponent },
+  { path: 'elevator-game', component: ElevatorGameComponent },
   { path: '**', redirectTo: '' } // 萬用路由，重定向到首頁
 ];
