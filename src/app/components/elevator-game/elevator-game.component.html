@@ -1,6 +1,18 @@
 <div class="elevator-game">
   <h2>電梯上下樓遊戲</h2>
+  <div class="elevator-building">
+    <div class="floors">
+      <div *ngFor="let floor of floors; let i = index" class="floor-row" [class.current]="floor === currentFloor">
+        <span class="floor-label">{{ floor }}F</span>
+        <span class="elevator-shaft">
+          <span class="elevator" *ngIf="floor === currentFloor">🛗</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button (click)="goUp()" [disabled]="currentFloor === maxFloor">⬆️ 上樓</button>
+    <button (click)="goDown()" [disabled]="currentFloor === minFloor">⬇️ 下樓</button>
+  </div>
   <div class="floor-display">目前樓層：{{ currentFloor }}</div>
-  <button (click)="goUp()" [disabled]="currentFloor === maxFloor">上樓</button>
-  <button (click)="goDown()" [disabled]="currentFloor === minFloor">下樓</button>
 </div>

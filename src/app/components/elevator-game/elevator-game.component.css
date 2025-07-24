@@ -2,12 +2,73 @@
   text-align: center;
   margin-top: 2rem;
 }
-.floor-display {
-  font-size: 2rem;
+
+.elevator-building {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.floors {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #e0e0e0;
+  border-radius: 10px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 8px #bbb;
+}
+
+.floor-row {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  margin: 2px 0;
+  width: 120px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.floor-row.current {
+  background: #ffe082;
+  font-weight: bold;
+}
+.floor-label {
+  width: 40px;
+  text-align: right;
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+.elevator-shaft {
+  width: 40px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.elevator {
+  font-size: 1.5rem;
+  transition: transform 0.2s;
+}
+.controls {
   margin-bottom: 1rem;
 }
-button {
+.controls button {
   margin: 0 1rem;
   padding: 0.5rem 1.5rem;
   font-size: 1.2rem;
+  border-radius: 6px;
+  border: none;
+  background: #90caf9;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.controls button:disabled {
+  background: #bdbdbd;
+  color: #888;
+  cursor: not-allowed;
+}
+.floor-display {
+  font-size: 1.3rem;
+  margin-top: 0.5rem;
 }
