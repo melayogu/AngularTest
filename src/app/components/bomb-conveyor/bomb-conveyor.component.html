@@ -1,0 +1,100 @@
+<div class="game-container">
+  <div class="game-header">
+    <h1>💣 炸彈履帶遊戲</h1>
+    <div class="game-info">
+      <div class="info-item">
+        <span class="label">分數：</span>
+        <span class="value">{{ score }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">生命：</span>
+        <span class="value">{{ '❤️'.repeat(lives) }}</span>
+      </div>
+    </div>
+    <div class="game-controls">
+      <button (click)="togglePause()" [disabled]="gameOver" class="control-btn">
+        {{ isPaused ? '▶️ 繼續' : '⏸️ 暫停' }}
+      </button>
+      <button (click)="restart()" class="control-btn">🔄 重新開始</button>
+    </div>
+  </div>
+
+  <div class="game-instructions">
+    <p>💡 點擊履帶節點來旋轉方向，將炸彈引導到對應顏色的出口！</p>
+  </div>
+
+  <div class="game-board">
+    <div class="grid">
+      <div *ngFor="let row of grid; let rowIndex = index" class="grid-row">
+        <div *ngFor="let node of row; let colIndex = index"
+             class="grid-cell"
+             (click)="rotateNode(rowIndex, colIndex)">
+
+          <!-- 履帶節點 -->
+          <div *ngIf="node"
+               class="conveyor-node"
+               [class.spawn-node]="node.type === 'spawn'"
+               [class.exit-node]="node.type === 'exit'"
+               [class.normal-node]="node.type === 'normal'"
+               [class.clickable]="node.type === 'normal'"
+               [style.transform]="'rotate(' + getNodeRotation(node.direction) + 'deg)'">
+
+            <!-- 生成點 -->
+            <div *ngIf="node.type === 'spawn'" class="spawn-icon">
+              🏭
+            </div>
+
+            <!-- 出口 -->
+            <div *ngIf="node.type === 'exit'"
+                 class="exit-icon"
+                 [style.background-color]="node.exitColor">
+              🎯
+            </div>
+
+            <!-- 普通履帶 -->
+            <div *ngIf="node.type === 'normal'" class="conveyor-icon">
+              ➡️
+            </div>
+          </div>
+
+          <!-- 炸彈 -->
+          <div *ngIf="getBombAtPosition(rowIndex, colIndex)"
+               class="bomb"
+               [style.background-color]="getBombAtPosition(rowIndex, colIndex)?.color">
+            💣
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="gameOver" class="game-over-overlay">
+    <div class="game-over-message">
+      <h2>遊戲結束！</h2>
+      <p>最終分數：{{ score }}</p>
+      <button (click)="restart()" class="restart-btn">再玩一次</button>
+    </div>
+  </div>
+
+  <div class="game-legend">
+    <h3>遊戲說明：</h3>
+    <div class="legend-items">
+      <div class="legend-item">
+        <span class="legend-icon">🏭</span>
+        <span>炸彈生成點</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-icon">➡️</span>
+        <span>可旋轉的履帶（點擊旋轉）</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-icon">🎯</span>
+        <span>出口（需匹配炸彈顏色）</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-icon">💣</span>
+        <span>炸彈（紅、藍、綠、黃）</span>
+      </div>
+    </div>
+  </div>
+</div>

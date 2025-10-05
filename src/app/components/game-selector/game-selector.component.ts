@@ -83,8 +83,7 @@ export class GameSelectorComponent {
       route: '/metro-tile-game',
       difficulty: 'medium',
       category: 'puzzle'
-    }
-    ,
+    },
     {
       id: 'elevator-game',
       name: '🛗 電梯上下樓',
@@ -93,6 +92,15 @@ export class GameSelectorComponent {
       route: '/elevator-game',
       difficulty: 'easy',
       category: 'arcade'
+    },
+    {
+      id: 'bomb-conveyor',
+      name: '💣 炸彈履帶',
+      description: '旋轉履帶節點引導炸彈到對應顏色的出口',
+      icon: '💣',
+      route: '/bomb-conveyor',
+      difficulty: 'medium',
+      category: 'puzzle'
     }
   ];
 
