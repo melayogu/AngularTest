@@ -27,6 +27,8 @@ export class PatternUnlockComponent implements OnInit {
   isWon = false;
   score = 0;
   gameStartTime = 0;
+  totalScore = 0;
+  level = 1;
 
   canvasWidth = 300;
   canvasHeight = 300;
@@ -147,6 +149,17 @@ export class PatternUnlockComponent implements OnInit {
 
       const timeTaken = Math.floor((Date.now() - this.gameStartTime) / 1000);
       this.score = Math.max(1000 - this.attempts * 100 - timeTaken * 10, 0);
+      this.totalScore += this.score;
+
+      // 顯示成功和下一個等級的信息
+      setTimeout(() => {
+        this.messageText = `✓ 恭喜！等級 ${this.level} 完成！準備進入等級 ${this.level + 1}...`;
+        this.messageColor = '#4CAF50';
+        this.updateCanvas();
+
+        // 延遲後進入下一等級
+        setTimeout(() => this.nextLevel(), 2000);
+      }, 1000);
     } else {
       this.messageText = `✗ 錯誤！嘗試次數: ${this.attempts}/${this.maxAttempts}`;
       this.messageColor = '#F44336';
@@ -247,6 +260,10 @@ export class PatternUnlockComponent implements OnInit {
   }
 
   resetGame() {
+    this.level = 1;
+    this.gridSize = 3;
+    this.dotRadius = 40;
+    this.totalScore = 0;
     this.attempts = 0;
     this.isGameOver = false;
     this.isWon = false;
@@ -254,6 +271,9 @@ export class PatternUnlockComponent implements OnInit {
     this.gameStartTime = Date.now();
     this.selectedDots = [];
     this.lines = [];
+    this.maxAttempts = 5;
+    this.initializeDots();
+    this.generateNewPattern();
     this.dots.forEach(dot => dot.isSelected = false);
     this.messageText = '繪製圖案來解鎖';
     this.messageColor = '#333';
@@ -305,7 +325,7 @@ export class PatternUnlockComponent implements OnInit {
 
         // 3秒後提示用戶開始繪製
         setTimeout(() => {
-          this.messageText = '現在請繪製相同的圖案';
+          this.messageText = '現在請繪製相同的圖案（等級 ' + this.level + '）';
           this.messageColor = '#333';
           this.updateCanvas();
         }, 2000);
@@ -353,8 +373,91 @@ export class PatternUnlockComponent implements OnInit {
     }
   }
 
+  nextLevel() {
+    this.level++;
+    this.gridSize++;
+    this.dotRadius = Math.max(25, 40 - this.level * 2);
+
+    // 增加最大嘗試次數
+    this.maxAttempts = 5 + Math.floor(this.level / 2);
+
+    // 重新初始化點和圖案
+    this.initializeDots();
+    this.generateNewPattern();
+
+    // 重置遊戲狀態
+    this.attempts = 0;
+    this.isGameOver = false;
+    this.isWon = false;
+    this.score = 0;
+    this.gameStartTime = Date.now();
+    this.selectedDots = [];
+    this.lines = [];
+    this.dots.forEach(dot => dot.isSelected = false);
+    this.messageText = '繪製圖案來解鎖';
+    this.messageColor = '#333';
+    this.userCanDraw = true;
+    this.updateCanvas();
+
+    // 播放示範
+    setTimeout(() => this.playDemo(), 500);
+  }
+
+  generateNewPattern() {
+    // 根據等級和格子大小生成新的隨機圖案
+    const totalDots = this.gridSize * this.gridSize;
+    const patternLength = Math.min(5 + this.level, totalDots);
+
+    const pattern: number[] = [];
+    const usedDots = new Set<number>();
+
+    // 第一個點隨機選擇
+    let firstDot = Math.floor(Math.random() * totalDots);
+    pattern.push(firstDot);
+    usedDots.add(firstDot);
+
+    // 生成剩餘的圖案點
+    while (pattern.length < patternLength) {
+      let nextDot: number;
+      let attempts = 0;
+
+      do {
+        nextDot = Math.floor(Math.random() * totalDots);
+        attempts++;
+      } while ((usedDots.has(nextDot) || !this.isAdjacentOrDiagonal(pattern[pattern.length - 1], nextDot)) && attempts < 10);
+
+      if (attempts < 10) {
+        pattern.push(nextDot);
+        usedDots.add(nextDot);
+      } else {
+        // 如果找不到相鄰的點，就隨機選擇任何未使用的點
+        for (let i = 0; i < totalDots; i++) {
+          if (!usedDots.has(i)) {
+            pattern.push(i);
+            usedDots.add(i);
+            break;
+          }
+        }
+      }
+    }
+
+    this.correctPattern = pattern;
+  }
+
+  isAdjacentOrDiagonal(dot1: number, dot2: number): boolean {
+    const row1 = Math.floor(dot1 / this.gridSize);
+    const col1 = dot1 % this.gridSize;
+    const row2 = Math.floor(dot2 / this.gridSize);
+    const col2 = dot2 % this.gridSize;
+
+    const rowDiff = Math.abs(row1 - row2);
+    const colDiff = Math.abs(col1 - col2);
+
+    return (rowDiff <= 1 && colDiff <= 1) && !(rowDiff === 0 && colDiff === 0);
+  }
+
   getHintPattern(): string {
-    return '提示: 按照數字順序連接 0→1→2→5→8→7→6→3';
+    return `等級 ${this.level} - 總分: ${this.totalScore}`;
   }
 
   goBack() {
