@@ -1,0 +1,234 @@
+.pattern-unlock-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 15px;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+.stat-item .label {
+  margin-right: 8px;
+  opacity: 0.9;
+}
+
+.stat-item .value {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.game-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.canvas-wrapper {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+}
+
+canvas {
+  border-radius: 10px;
+  cursor: crosshair;
+  display: block;
+  user-select: none;
+  max-width: 100%;
+  height: auto;
+}
+
+.message {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  min-height: 30px;
+  animation: fadeInOut 0.5s ease-in-out;
+  color: #333;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hint {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  max-width: 400px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .pattern-unlock-container {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .stats {
+    gap: 15px;
+  }
+
+  .stat-item {
+    padding: 8px 15px;
+    font-size: 0.95rem;
+  }
+
+  .message {
+    font-size: 1rem;
+  }
+
+  .hint {
+    font-size: 0.85rem;
+    padding: 10px 15px;
+    max-width: 90%;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pattern-unlock-container {
+    padding: 10px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stat-item {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .game-area {
+    gap: 15px;
+  }
+
+  .canvas-wrapper {
+    padding: 5px;
+  }
+
+  .message {
+    font-size: 0.9rem;
+  }
+
+  .hint {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}

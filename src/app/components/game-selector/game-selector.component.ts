@@ -93,6 +93,15 @@ export class GameSelectorComponent {
       route: '/elevator-game',
       difficulty: 'easy',
       category: 'arcade'
+    },
+    {
+      id: 'pattern-unlock',
+      name: '🔓 圖形解鎖',
+      description: '透過繪製特定圖案來解鎖手機',
+      icon: '🔐',
+      route: '/pattern-unlock',
+      difficulty: 'medium',
+      category: 'puzzle'
     }
   ];
 

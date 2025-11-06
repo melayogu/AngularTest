@@ -1,0 +1,53 @@
+<div class="pattern-unlock-container">
+  <div class="header">
+    <h1>🔓 圖形解鎖遊戲</h1>
+    <div class="stats">
+      <div class="stat-item">
+        <span class="label">嘗試次數:</span>
+        <span class="value">{{ attempts }}/{{ maxAttempts }}</span>
+      </div>
+      <div class="stat-item" *ngIf="isWon">
+        <span class="label">分數:</span>
+        <span class="value">{{ score }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-area">
+    <div class="canvas-wrapper">
+      <canvas
+        #gameCanvas
+        [width]="canvasWidth"
+        [height]="canvasHeight"
+        (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+        (mouseleave)="onMouseUp()"
+      ></canvas>
+    </div>
+
+    <div class="message" [style.color]="messageColor">
+      {{ messageText }}
+    </div>
+
+    <div class="hint">
+      {{ getHintPattern() }}
+    </div>
+  </div>
+
+  <div class="controls">
+    <button
+      class="btn btn-primary"
+      (click)="resetGame()"
+      *ngIf="isGameOver"
+    >
+      🔄 重新開始
+    </button>
+    <button
+      class="btn btn-secondary"
+      (click)="goBack()"
+    >
+      ← 返回
+    </button>
+  </div>
+</div>

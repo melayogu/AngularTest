@@ -9,6 +9,7 @@ import { Puzzle2048Component } from './components/puzzle-2048/puzzle-2048.compon
 import { MetroTileGameComponent } from './components/metro-tile-game/metro-tile-game.component';
 
 import { ElevatorGameComponent } from './components/elevator-game/elevator-game.component';
+import { PatternUnlockComponent } from './components/pattern-unlock/pattern-unlock.component';
 
 export const routes: Routes = [
   { path: '', component: GameSelectorComponent },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'puzzle-2048', component: Puzzle2048Component },
   { path: 'metro-tile-game', component: MetroTileGameComponent },
   { path: 'elevator-game', component: ElevatorGameComponent },
+  { path: 'pattern-unlock', component: PatternUnlockComponent },
   { path: '**', redirectTo: '' } // 萬用路由，重定向到首頁
 ];
