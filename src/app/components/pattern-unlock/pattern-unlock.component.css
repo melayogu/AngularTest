@@ -128,6 +128,20 @@ canvas {
   transform: translateY(0);
 }
 
+.btn-demo {
+  background: linear-gradient(135deg, #2196F3 0%, #1565C0 100%);
+  color: white;
+}
+
+.btn-demo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.btn-demo:active {
+  transform: translateY(0);
+}
+
 .btn-secondary {
   background: rgba(255, 255, 255, 0.2);
   color: white;

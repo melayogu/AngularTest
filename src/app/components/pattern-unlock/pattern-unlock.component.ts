@@ -36,11 +36,18 @@ export class PatternUnlockComponent implements OnInit {
   messageColor = '#333';
   messageText = '繪製圖案來解鎖';
 
+  isPlayingDemo = false;
+  demoPattern: number[] = [];
+  demoLines: { x1: number; y1: number; x2: number; y2: number }[] = [];
+  userCanDraw = true;
+
   constructor(private router: Router) {}
 
   ngOnInit() {
     this.initializeDots();
     this.gameStartTime = Date.now();
+    // 遊戲開始時播放示範
+    setTimeout(() => this.playDemo(), 500);
   }
 
   initializeDots() {
@@ -60,7 +67,7 @@ export class PatternUnlockComponent implements OnInit {
   }
 
   onMouseDown(event: MouseEvent) {
-    if (this.isGameOver) return;
+    if (this.isGameOver || this.isPlayingDemo || !this.userCanDraw) return;
 
     const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -250,14 +257,107 @@ export class PatternUnlockComponent implements OnInit {
     this.dots.forEach(dot => dot.isSelected = false);
     this.messageText = '繪製圖案來解鎖';
     this.messageColor = '#333';
+    this.userCanDraw = true;
     this.updateCanvas();
+    // 重新開始時播放示範
+    setTimeout(() => this.playDemo(), 500);
   }
 
-  goBack() {
-    this.router.navigate(['/']);
+  playDemo() {
+    this.isPlayingDemo = true;
+    this.userCanDraw = false;
+    this.messageText = '🎬 示範中...';
+    this.messageColor = '#2196F3';
+    this.demoPattern = [...this.correctPattern];
+    this.demoLines = [];
+
+    const delayBetweenDots = 400; // 每個點之間的延遲時間（毫秒）
+    let currentIndex = 0;
+
+    const playNextDot = () => {
+      if (currentIndex < this.demoPattern.length) {
+        const dotId = this.demoPattern[currentIndex];
+        const dot = this.dots[dotId];
+
+        // 添加線條
+        if (currentIndex > 0) {
+          const prevDot = this.dots[this.demoPattern[currentIndex - 1]];
+          this.demoLines.push({
+            x1: prevDot.x,
+            y1: prevDot.y,
+            x2: dot.x,
+            y2: dot.y
+          });
+        }
+
+        this.drawDemo();
+        currentIndex++;
+        setTimeout(playNextDot, delayBetweenDots);
+      } else {
+        // 示範完成
+        this.isPlayingDemo = false;
+        this.userCanDraw = true;
+        this.messageText = '✓ 示範完成，現在輪到你！';
+        this.messageColor = '#4CAF50';
+        this.demoPattern = [];
+        this.demoLines = [];
+        this.updateCanvas();
+
+        // 3秒後提示用戶開始繪製
+        setTimeout(() => {
+          this.messageText = '現在請繪製相同的圖案';
+          this.messageColor = '#333';
+          this.updateCanvas();
+        }, 2000);
+      }
+    };
+
+    playNextDot();
+  }
+
+  drawDemo() {
+    const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d')!;
+    ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+
+    // 繪製網格背景
+    this.drawGridBackground(ctx);
+
+    // 繪製示範線條
+    ctx.strokeStyle = '#FF9800';
+    ctx.lineWidth = 3;
+    for (const line of this.demoLines) {
+      ctx.beginPath();
+      ctx.moveTo(line.x1, line.y1);
+      ctx.lineTo(line.x2, line.y2);
+      ctx.stroke();
+    }
+
+    // 繪製所有點，示範中的點用不同顏色
+    for (const dot of this.dots) {
+      const isDemoDot = this.demoLines.length > 0 && this.demoLines.some(line =>
+        (line.x1 === dot.x && line.y1 === dot.y) || (line.x2 === dot.x && line.y2 === dot.y)
+      );
+      ctx.fillStyle = isDemoDot ? '#FF9800' : '#E0E0E0';
+      ctx.beginPath();
+      ctx.arc(dot.x, dot.y, this.dotRadius, 0, 2 * Math.PI);
+      ctx.fill();
+
+      if (isDemoDot) {
+        ctx.strokeStyle = '#E65100';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+    }
   }
 
   getHintPattern(): string {
     return '提示: 按照數字順序連接 0→1→2→5→8→7→6→3';
+  }
+
+  goBack() {
+    this.router.navigate(['/']);
   }
 }

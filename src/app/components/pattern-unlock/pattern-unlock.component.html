@@ -37,6 +37,13 @@
 
   <div class="controls">
     <button
+      class="btn btn-demo"
+      (click)="playDemo()"
+      *ngIf="!isGameOver && !isPlayingDemo"
+    >
+      🎬 重新示範
+    </button>
+    <button
       class="btn btn-primary"
       (click)="resetGame()"
       *ngIf="isGameOver"
