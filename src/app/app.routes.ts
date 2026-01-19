@@ -9,6 +9,7 @@ import { Puzzle2048Component } from './components/puzzle-2048/puzzle-2048.compon
 import { MetroTileGameComponent } from './components/metro-tile-game/metro-tile-game.component';
 import { ElevatorGameComponent } from './components/elevator-game/elevator-game.component';
 import { BombConveyorComponent } from './components/bomb-conveyor/bomb-conveyor.component';
+import { DarkChessComponent } from './components/dark-chess/dark-chess.component';
 
 export const routes: Routes = [
   { path: '', component: GameSelectorComponent },
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'metro-tile-game', component: MetroTileGameComponent },
   { path: 'elevator-game', component: ElevatorGameComponent },
   { path: 'bomb-conveyor', component: BombConveyorComponent },
+  { path: 'dark-chess', component: DarkChessComponent },
   { path: '**', redirectTo: '' } // 萬用路由，重定向到首頁
 ];

@@ -101,6 +101,15 @@ export class GameSelectorComponent {
       route: '/bomb-conveyor',
       difficulty: 'medium',
       category: 'puzzle'
+    },
+    {
+      id: 'dark-chess',
+      name: '🀄 暗棋對弈',
+      description: '經典台灣暗棋，翻開棋子進行策略對戰',
+      icon: '♟️',
+      route: '/dark-chess',
+      difficulty: 'medium',
+      category: 'strategy'
     }
   ];
 

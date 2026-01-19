@@ -1,0 +1,113 @@
+<div class="game-container">
+  <div class="game-header">
+    <button class="back-btn" (click)="backToMenu()">← 返回遊戲選單</button>
+    <h1>🀄 暗棋對弈</h1>
+    <div class="game-info">
+      <div class="stat red-stat">
+        <span class="stat-label">🔴 紅方分數</span>
+        <span class="stat-value">{{redScore}}</span>
+      </div>
+      <div class="stat turn-stat">
+        <span class="stat-label">當前回合</span>
+        <span class="stat-value" [class.red-turn]="currentPlayer === 'red'" [class.black-turn]="currentPlayer === 'black'">
+          {{getCurrentPlayerText()}}
+        </span>
+      </div>
+      <div class="stat black-stat">
+        <span class="stat-label">⚫ 黑方分數</span>
+        <span class="stat-value">{{blackScore}}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">回合數</span>
+        <span class="stat-value">{{turnCount}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-area">
+    <!-- 黑方被吃的棋子 -->
+    <div class="captured-pieces black-captured">
+      <h3>紅方吃掉的棋子</h3>
+      <div class="captured-list">
+        <div class="captured-piece black" *ngFor="let piece of capturedBlackPieces">
+          {{piece.type}}
+        </div>
+      </div>
+    </div>
+
+    <!-- 棋盤 -->
+    <div class="chess-board">
+      <div class="board-row" *ngFor="let row of board; let rowIndex = index">
+        <div
+          *ngFor="let cell of row; let colIndex = index"
+          [class]="getCellClass(cell)"
+          (click)="onCellClick(cell)">
+          <div [class]="getPieceClass(cell.piece)">
+            {{getPieceDisplay(cell.piece)}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 紅方被吃的棋子 -->
+    <div class="captured-pieces red-captured">
+      <h3>黑方吃掉的棋子</h3>
+      <div class="captured-list">
+        <div class="captured-piece red" *ngFor="let piece of capturedRedPieces">
+          {{piece.type}}
+        </div>
+      </div>
+    </div>
+
+    <!-- 遊戲結束畫面 -->
+    <div class="game-over" *ngIf="gameOver">
+      <h2>{{getWinnerText()}}</h2>
+      <div class="final-stats">
+        <div class="final-stat">
+          <span class="final-stat-label">紅方總分</span>
+          <span class="final-stat-value red">{{redScore}}</span>
+        </div>
+        <div class="final-stat">
+          <span class="final-stat-label">黑方總分</span>
+          <span class="final-stat-value black">{{blackScore}}</span>
+        </div>
+        <div class="final-stat">
+          <span class="final-stat-label">總回合數</span>
+          <span class="final-stat-value">{{turnCount}}</span>
+        </div>
+      </div>
+      <button class="retry-btn" (click)="startGame()">再來一局</button>
+    </div>
+  </div>
+
+  <div class="game-controls">
+    <div class="control-instructions">
+      <h3>🎯 遊戲規則</h3>
+      <p>🀄 點擊未翻開的棋子可以翻開它</p>
+      <p>🎮 點擊自己的棋子選中，再點擊目標位置移動或吃子</p>
+      <p>⚔️ 吃子規則：大吃小，同級可互吃</p>
+      <p>🔫 炮/包：可跳過一個棋子吃掉對方棋子</p>
+      <p>👑 兵/卒可以吃帥/將，但帥/將不能吃兵/卒</p>
+      <p>🏆 吃掉對方所有棋子或讓對方無法移動即獲勝</p>
+      <div class="piece-ranks">
+        <span class="rank-item">帥/將 &gt; 仕/士 &gt; 相/象 &gt; 俥/車 &gt; 傌/馬 &gt; 炮/包 &gt; 兵/卒</span>
+      </div>
+    </div>
+
+    <div class="game-buttons">
+      <button (click)="startGame()"
+              [disabled]="gameRunning"
+              class="game-btn start-btn">
+        {{gameRunning ? '遊戲進行中' : '開始遊戲'}}
+      </button>
+      <button (click)="resetGame()"
+              class="game-btn reset-btn">
+        重新開始
+      </button>
+    </div>
+
+    <div class="keyboard-hints">
+      <span>⌨️ 快捷鍵：ESC 取消選擇 | R 重新開始</span>
+    </div>
+  </div>
+</div>
